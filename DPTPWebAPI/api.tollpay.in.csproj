@@ -519,6 +519,9 @@
     <Compile Include="ASPTollpayStock_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ASPTransactionReportByCustomer_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="AxisSetuAPILogger.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

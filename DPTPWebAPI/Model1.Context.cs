@@ -62,12 +62,6 @@ namespace DPTPWebAPI
         public virtual DbSet<IndusInd_CustomerKYC> IndusInd_CustomerKYC { get; set; }
         public virtual DbSet<IndusInd_CustomerRegistration> IndusInd_CustomerRegistration { get; set; }
         public virtual DbSet<IndusInd_Regions> IndusInd_Regions { get; set; }
-
-        internal ObjectResult<UsersBy_OwnerID_Result> UsersBy_OwnerID(string v)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual DbSet<IndusInd_TagRegistration> IndusInd_TagRegistration { get; set; }
         public virtual DbSet<IndusInd_TagStockDetails> IndusInd_TagStockDetails { get; set; }
         public virtual DbSet<IndusInd_Token_Secrete> IndusInd_Token_Secrete { get; set; }
@@ -702,6 +696,15 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ASPTollpayStockTags_Result>("ASPTollpayStockTags");
         }
     
+        public virtual ObjectResult<ASPTransactionReportByCustomer_Result> ASPTransactionReportByCustomer(string vdist)
+        {
+            var vdistParameter = vdist != null ?
+                new ObjectParameter("vdist", vdist) :
+                new ObjectParameter("vdist", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ASPTransactionReportByCustomer_Result>("ASPTransactionReportByCustomer", vdistParameter);
+        }
+    
         public virtual ObjectResult<ChartOnLineUserCount_Result> ChartOnLineUserCount()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ChartOnLineUserCount_Result>("ChartOnLineUserCount");
@@ -1238,11 +1241,6 @@ namespace DPTPWebAPI
         public virtual ObjectResult<ReportTodayTripAmountByCollectionMode_Result> ReportTodayTripAmountByCollectionMode()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportTodayTripAmountByCollectionMode_Result>("ReportTodayTripAmountByCollectionMode");
-        }
-    
-        public virtual ObjectResult<Nullable<int>> S()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("S");
         }
     
         public virtual ObjectResult<salesreport_Result> salesreport()

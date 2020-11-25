@@ -18,6 +18,58 @@ using System.Web.Http.Results;
 
 namespace DPTPWebAPI.Controllers
 {
+
+    public class ClsTagClosureOTPResponse
+    {
+        public string StatusCode { get; set; }
+        public string Status { get; set; }
+    }
+
+
+    public class ClsTagClosureResendOTPResponse
+    {
+        public string StatusCode { get; set; }
+        public string Status { get; set; }
+    }
+
+
+
+    public class ClsTagClosureReqResponse
+    {
+        public string StatusCode { get; set; }
+        public string Status { get; set; }
+        public int AccountNoMandatory { get; set; }
+    }
+
+
+
+    public class TagClosureOTP
+    {
+        public string TagAccountNo { get; set; }
+        public string OTP { get; set; }
+        public string AccountHolderName { get; set; }
+        public string BankName { get; set; }
+        public string AccountNo { get; set; }
+        public string IFSCcode { get; set; }
+        public string ChequeImage { get; set; }
+    }
+
+
+
+    public class TagClosureResendOTP
+    {
+        public string TagAccountNo { get; set; }
+    }
+
+
+
+    public class TagClosureReq
+    {
+        public string TagAccountNo { get; set; }
+        public string Reason { get; set; }
+    }
+
+
     public class disttransactions
     {
         public int distributorid { get; set; }
@@ -28,7 +80,7 @@ namespace DPTPWebAPI.Controllers
     }
     public class dist
     {
-        public static object ownerID { get; internal set; }
+
         public string distributorid { get; set; }
     }
 
@@ -44,18 +96,18 @@ namespace DPTPWebAPI.Controllers
         [Route("api/DistributorAndTeamUnSoldsTags")]
         public HttpResponseMessage DistributorAndTeamUnSoldsTags(HttpRequestMessage request, dist d)
         {
-     
+
             return request.CreateResponse(HttpStatusCode.OK, db.DistributorAndTeamUnSoldsTags(d.distributorid.ToString()));
         }
-        
+
         [JwtAuthentication]
         [Route("api/DistributorAndTeamSoldsTags")]
         public HttpResponseMessage DistributorAndTeamSoldsTags(HttpRequestMessage request, disttransactions d)
         {
 
-           return request.CreateResponse(HttpStatusCode.OK, db.DistributorAndTeamSoldsTags(d.distributorid.ToString(), d.startdate, d.enddate));
+            return request.CreateResponse(HttpStatusCode.OK, db.DistributorAndTeamSoldsTags(d.distributorid.ToString(), d.startdate, d.enddate));
         }
-       
+
         [JwtAuthentication]
         [Route("api/DistributorAccPassbookByDistID")]
         public HttpResponseMessage DistributorAccPassbookByDistID(HttpRequestMessage request, disttransactions d)
@@ -71,7 +123,7 @@ namespace DPTPWebAPI.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
-                 
+
 
             return request.CreateResponse(HttpStatusCode.OK, db.salesreportbyDistributorId(d.distributorid));
         }
@@ -134,7 +186,7 @@ namespace DPTPWebAPI.Controllers
         //https://localhost:44391/api/ListStates
 
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/ListStates")]
         public IHttpActionResult PostAllStates([FromBody] clsInGetState regionId)
         {
@@ -191,7 +243,7 @@ namespace DPTPWebAPI.Controllers
 
 
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/GetAllCities")]
         public IHttpActionResult PostAllCities([FromBody] clsInGetCity data) //string RegionID, string StateID
         {
@@ -247,7 +299,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //https://localhost:44391/api/GetIdType
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/GetIdType")]
         public IHttpActionResult GetAllIdType()
         {
@@ -292,7 +344,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //https://localhost:44391/api/WalletCustRegistration
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/WalletCustRegistration")]
         public IHttpActionResult PostWalletCustRegistration([FromBody] IndusInd_CustomerRegistration cust)
         {
@@ -409,7 +461,7 @@ namespace DPTPWebAPI.Controllers
         }
 
         //https://localhost:44391/api/WalletCustRegistration
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/CustomerRegistrationNonIndividual")]
         public IHttpActionResult CustomerRegistrationNonIndividual([FromBody] IndusInd_CustomerRegistration cust)
         {
@@ -426,7 +478,7 @@ namespace DPTPWebAPI.Controllers
                 CustomerRegistrationNonIndividual objCustReg = new CustomerRegistrationNonIndividual()
                 {
                     TransactionID = cust.TransactionID,
-                    Name = cust.FirstName   , // + " " + cust.LastName,
+                    Name = cust.FirstName, // + " " + cust.LastName,
                     ContactPerson = cust.FirstName + " " + cust.LastName,
                     ContactNumber = cust.MobileNumber,
                     AddressProofID = cust.AddressProofID,
@@ -440,7 +492,7 @@ namespace DPTPWebAPI.Controllers
                     PinCode = Convert.ToString(cust.Pincode),
                     EmailId = cust.EmailID,
                     GST = cust.GST,
-                    CIN=cust.CIN,
+                    CIN = cust.CIN,
                     Entity = cust.Entity,
                     PAN = cust.PANNo
 
@@ -529,7 +581,7 @@ namespace DPTPWebAPI.Controllers
         }
 
         //https://localhost:44391/api/WalletCustRegistrationResendOTP
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/WalletCustRegistrationResendOTP")]
         public IHttpActionResult PostCustomerRegResendOTP([FromBody] clsWalletCustomerRegistrationResendOTP custOTP)
         {
@@ -585,14 +637,14 @@ namespace DPTPWebAPI.Controllers
         }
 
         //https://localhost:44391/api/WalletCustRegistrationResendOTP
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/WalletCustValidatedOTP")]
         public IHttpActionResult PostCustomerValidatedOTP([FromBody] clsWalletCustomerRegistrationOTPValidation custValidOTP)
         {
             string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/WalletIndividual/CustomerRegistration/OTPValidation";
             string methodtype = "POST";
 
-                string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
+            string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
             clsWalletCustomerRegistrationOTPValidation objOTPValid = new clsWalletCustomerRegistrationOTPValidation()
             {
                 TransactionID = custValidOTP.TransactionID,
@@ -637,7 +689,7 @@ namespace DPTPWebAPI.Controllers
                             icr.TransactionDate = DateTime.Now;
                             icr.isOTPVerified = "Yes";
                             db.SaveChanges();
-                           
+
                         }
                     }
                     return Ok(objResponse);
@@ -653,7 +705,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //https://localhost:44391/api/GetVehicelClass
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/GetVehicelClass")]
         public IHttpActionResult GetVehicelClass()
         {
@@ -694,7 +746,7 @@ namespace DPTPWebAPI.Controllers
             return Ok(obj);
         }
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/FindWalletInfo")]
         public IHttpActionResult Postgetwalletinfo([FromBody] ClsInputWalletInfo objinputwallett)
         {
@@ -750,7 +802,7 @@ namespace DPTPWebAPI.Controllers
                             obj.WalletInfoDetails[0].PANNO = cust.PANNo;
                             obj.WalletInfoDetails[0].AddharNO = cust.Aadhaarno;
                         }
-                            return Ok(obj);
+                        return Ok(obj);
 
                     }
                     catch (Exception ex)
@@ -766,7 +818,7 @@ namespace DPTPWebAPI.Controllers
 
         }
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/WalletRecharge")]
         public IHttpActionResult PostWalletRecharge([FromBody] ClsRechargeWallet objRechargeWallet)
         {
@@ -848,7 +900,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //RechargeTagFromWallet()
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/recharge_tag_from_wallet")]
         public IHttpActionResult PostRechargeTagFromWallet([FromBody] RechargeTagFromWallet ObjFromWallet)
         {
@@ -921,7 +973,7 @@ namespace DPTPWebAPI.Controllers
         }
 
         //MoveTagFromWallet
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/move_to_wallet_from_tag")]
 
         public IHttpActionResult PostMoveTagFromWallet([FromBody] RechargeTagFromWallet ObjFromWallet)
@@ -999,7 +1051,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //https://localhost:44391/api/TagRegistration
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/TagRegistration")]
         public IHttpActionResult PostTagRegistration([FromBody] ClsTollPayTagRegistraion ObjTPTagReg)
         {
@@ -1089,7 +1141,7 @@ namespace DPTPWebAPI.Controllers
 
 
         //RequeryTagregistration()//https://localhost:44391/api/RequeryTagregistration
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/RequeryTagregistration")]
         public IHttpActionResult PostRequeryTagregistration([FromBody] ClsInputRequerytagreg objReqTag)
         {
@@ -1154,7 +1206,7 @@ namespace DPTPWebAPI.Controllers
 
 
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/TagReplacement")]
         public IHttpActionResult TagReplacement([FromBody] TagReplacement objRepTag)
         {
@@ -1168,7 +1220,7 @@ namespace DPTPWebAPI.Controllers
             else
 
             {
-                
+
                 string clsTagInput = JsonConvert.SerializeObject(objRepTag);
 
                 string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
@@ -1216,7 +1268,7 @@ namespace DPTPWebAPI.Controllers
         } //method ends 
 
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/TagStatus")]
         public IHttpActionResult TagStatus([FromBody] TagStatus ts)
         {
@@ -1281,32 +1333,32 @@ namespace DPTPWebAPI.Controllers
         public IHttpActionResult TransactionHistoryByDistributor([FromBody] clsDistCustomerTagTranHistory cdctth)
         {
             //get all customer mobile nos
-           // List<int> distteam = db.Users.Where(u => u.srno == cdctth.DistributorId || u.DistributorId == cdctth.DistributorId).Select(s => s.srno).ToList();
-         //    db.ecom_RFID.Where(a => distteam.Contains(Convert.ToInt32(a.ecom_DistributionID))).ToList();
+            // List<int> distteam = db.Users.Where(u => u.srno == cdctth.DistributorId || u.DistributorId == cdctth.DistributorId).Select(s => s.srno).ToList();
+            //    db.ecom_RFID.Where(a => distteam.Contains(Convert.ToInt32(a.ecom_DistributionID))).ToList();
             List<ClsInputTransactionHistory> didcustomertags = new List<ClsInputTransactionHistory>();
-         
-            didcustomertags = db.DistributorAndTeamCustomerList(cdctth.DistributorId.ToString(), Convert.ToDateTime( cdctth.FromDate), Convert.ToDateTime(cdctth.ToDate))
-                             .Select(s=> new ClsInputTransactionHistory() { FromDate= cdctth.FromDate,ToDate= cdctth.ToDate,MobileNumber=s.ecom_CustomerMobNo, TagID=s.ecom_RFIDTagSrNo }).ToList();
-            decimal TotalAllCustomerCredit=0;
-            decimal TotalAllCustomerDebit=0;
+
+            didcustomertags = db.DistributorAndTeamCustomerList(cdctth.DistributorId.ToString(), Convert.ToDateTime(cdctth.FromDate), Convert.ToDateTime(cdctth.ToDate))
+                             .Select(s => new ClsInputTransactionHistory() { FromDate = cdctth.FromDate, ToDate = cdctth.ToDate, MobileNumber = s.ecom_CustomerMobNo, TagID = s.ecom_RFIDTagSrNo }).ToList();
+            decimal TotalAllCustomerCredit = 0;
+            decimal TotalAllCustomerDebit = 0;
             List<CustomerVehicle> CustomerVehicleList = new List<CustomerVehicle>();
             foreach (var item in didcustomertags)
             {
-                 CustomerVehicle cv = new CustomerVehicle();
-                 cv.CustomerMobileNo = item.MobileNumber;
-                 IHttpActionResult res = PostTransactionHistory(item);
-                 dynamic aResponseTranHistory = res as OkNegotiatedContentResult<ResponseTranHistory>;
-            
-                 if(aResponseTranHistory.Content.StatusCode=="000")
+                CustomerVehicle cv = new CustomerVehicle();
+                cv.CustomerMobileNo = item.MobileNumber;
+                IHttpActionResult res = PostTransactionHistory(item);
+                dynamic aResponseTranHistory = res as OkNegotiatedContentResult<ResponseTranHistory>;
+
+                if (aResponseTranHistory.Content.StatusCode == "000")
                 {
-                    Transactiondetail[] tdl =  aResponseTranHistory.Content.TransactionDetails;
+                    Transactiondetail[] tdl = aResponseTranHistory.Content.TransactionDetails;
                     if (tdl.Where(s => s.TransactionType == "Debit").Count() > 0)
                     {
                         cv.CustomerVehicleNo = tdl.Where(s => s.TransactionType == "Debit").FirstOrDefault().VehicleNo;
                         cv.TotalAllCustomerDebit = tdl.Where(s => s.TransactionType == "Debit").Sum(s => Convert.ToDecimal(s.Amount));
                     }
-                    cv.TotalAllCustomerCredit= tdl.Where(s => s.TransactionType == "Credit").Sum(s => Convert.ToDecimal(s.Amount));
-               
+                    cv.TotalAllCustomerCredit = tdl.Where(s => s.TransactionType == "Credit").Sum(s => Convert.ToDecimal(s.Amount));
+
                     TotalAllCustomerCredit += cv.TotalAllCustomerCredit;
                     TotalAllCustomerDebit += cv.TotalAllCustomerDebit;
                 }
@@ -1316,10 +1368,10 @@ namespace DPTPWebAPI.Controllers
             summary.TotalAllCustomerCredit = TotalAllCustomerCredit;
             summary.TotalAllCustomerDebit = TotalAllCustomerDebit;
             summary.CustomerVehicleWiseDebit = CustomerVehicleList;
-                return Ok(summary);
+            return Ok(summary);
         }
 
-            [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/TransactionHistory")]
         public IHttpActionResult PostTransactionHistory([FromBody] ClsInputTransactionHistory objHistory)
         {
@@ -1389,7 +1441,7 @@ namespace DPTPWebAPI.Controllers
 
 
 
-         [JwtAuthentication]
+        [JwtAuthentication]
         [Route("api/CustomerKYCUpload")]
         public IHttpActionResult CustomerKYCUpload([FromBody] CustomerKYCUpload ckycu)
         {
@@ -1449,6 +1501,189 @@ namespace DPTPWebAPI.Controllers
             }
 
         } //method ends 
+
+        [JwtAuthentication]
+        [Route("api/TagAccountClosingRequest")]
+        public IHttpActionResult TagAccountClosingRequest([FromBody] TagClosureReq ckycu)
+        {
+            string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/TagAccountClosingRequest";
+            string methodtype = "POST";
+            string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+
+            {
+
+                string clsTagInput = JsonConvert.SerializeObject(ckycu);
+
+                string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
+
+                ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedClsTagInput };
+                string clsTagInputserial = JsonConvert.SerializeObject(objRequestData);
+
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var client = new RestClient(strulr);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", thetoken);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    try
+                    {
+
+                        TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                        var x = json.ResponseData;// this extracts the encrypted requesttoken;
+                                                  //response decryption
+
+                        string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
+                        ClsTagClosureReqResponse objrespone = JsonConvert.DeserializeObject<ClsTagClosureReqResponse>(s1);
+                        return Ok(objrespone);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return BadRequest(ex.Message);
+                    }
+
+                }
+
+
+            }
+
+        }//method ends
+
+        [JwtAuthentication]
+        [Route("api/TagAccountClosingResendOTP")]
+        public IHttpActionResult TagAccountClosingResendOTP([FromBody] TagClosureResendOTP ckycu)
+        {
+            string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/TagAccountClosingResendOTP";
+            string methodtype = "POST";
+            string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+
+            {
+
+                string clsTagInput = JsonConvert.SerializeObject(ckycu);
+
+                string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
+
+                ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedClsTagInput };
+                string clsTagInputserial = JsonConvert.SerializeObject(objRequestData);
+
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var client = new RestClient(strulr);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", thetoken);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    try
+                    {
+
+                        TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                        var x = json.ResponseData;// this extracts the encrypted requesttoken;
+                                                  //response decryption
+
+                        string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
+                        ClsTagClosureResendOTPResponse objrespone = JsonConvert.DeserializeObject<ClsTagClosureResendOTPResponse>(s1);
+                        return Ok(objrespone);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return BadRequest(ex.Message);
+                    }
+
+                }
+
+
+            }
+
+        }//method ends
+
+        [JwtAuthentication]
+        [Route("api/TagAccountClosingOTP")]
+        public IHttpActionResult TagAccountClosingOTP([FromBody] TagClosureOTP ckycu)
+        {
+            string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/TagAccountClosingOTP";
+            string methodtype = "POST";
+            string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+
+            {
+
+                string clsTagInput = JsonConvert.SerializeObject(ckycu);
+
+                string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
+
+                ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedClsTagInput };
+                string clsTagInputserial = JsonConvert.SerializeObject(objRequestData);
+
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var client = new RestClient(strulr);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", thetoken);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    try
+                    {
+
+                        TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                        var x = json.ResponseData;// this extracts the encrypted requesttoken;
+                                                  //response decryption
+
+                        string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
+                        ClsTagClosureOTPResponse objrespone = JsonConvert.DeserializeObject<ClsTagClosureOTPResponse>(s1);
+                        return Ok(objrespone);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return BadRequest(ex.Message);
+                    }
+
+                }
+
+
+            }
+
+        }//method ends
 
     }
 }

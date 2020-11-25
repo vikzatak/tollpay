@@ -1,0 +1,24 @@
+10 IDOR To View Other Patient Profile Details
+
+meldap@crystalrunhealthcare.com
+Blu3m00n*
+
+/
+
+
+$sugar_config['resource_management'] = NULL;
+$sugar_config['resource_management']['default_limit'] = 2500;
+$sugar_config['resource_management']['special_query_modules'] = 
+    array (
+      0 => 'Reports',
+      1 => 'Export',
+      2 => 'Import',
+      3 => 'Administration',
+      4 => 'Sync',
+      5 => 'Accounts', // To increase the query limit of 1,000 reached for Accounts module to "special_query_limit" (50,000)
+      6 => 'Contacts', // To increase the query limit of 1,000 reached for Contacts module to "special_query_limit" (50,000)
+      7 => 'Leads', // To increase the query limit of 1,000 reached for Leads module to "special_query_limit" (50,000)
+      8 => 'Meetings', // To increase the query limit of 1,000 reached for Meetings module to "special_query_limit" (50,000)
+      9 => 'Calls', // To increase the query limit of 1,000 reached for Calls module to "special_query_limit" (50,000)
+      10 => 'Tasks', // To increase the query limit of 1,000 reached for Calls module to "special_query_limit" (50,000)
+    );

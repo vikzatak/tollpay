@@ -1,0 +1,42 @@
+﻿@model DPTPWebAPI.TranP_TruckTypes
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TranP_TruckTypes</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TRUCK_TYPE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TRUCK_TYPE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SIZE_FT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SIZE_FT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MAX_WEIGHT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MAX_WEIGHT)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SrNo }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

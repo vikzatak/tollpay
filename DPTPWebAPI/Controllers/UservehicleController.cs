@@ -145,11 +145,12 @@ namespace DPTPWebAPI.Controllers
 
         [JwtAuthentication]
         // GET: api/Uservehicle/5
-        [Route("api/GetUsersByOwnersId")]
+        [Route("api/GetRidersByOwnersId")]
+        [HttpPost]
         public HttpResponseMessage GetUsersByOwnersId(HttpRequestMessage request, dist ownerID)
         {
-            return request.CreateResponse(HttpStatusCode.OK,db.UsersBy_OwnerID(dist.ownerID.ToString()));
-            
-        }
+            int VownerId=Convert.ToInt32(ownerID.distributorid);
+            return request.CreateResponse(HttpStatusCode.OK, db.UsersBy_OwnerID(VownerId));
+        }//method end
     }
 }

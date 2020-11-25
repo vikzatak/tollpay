@@ -13,11 +13,11 @@ namespace DPTPWebAPI
     
     public partial class UsersBy_OwnerID_Result
     {
-        public Nullable<int> userid { get; set; }
-        public string uservehicleType { get; set; }
-        public string uservehicleRegNo { get; set; }
+        public int srno { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string username { get; set; }
+        public string VehicleType { get; set; }
+        public string uservehicleRegNo { get; set; }
     }
 }

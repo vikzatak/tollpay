@@ -1263,6 +1263,9 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         </Function>
         <Function Name="ASPTollpayStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ASPTollpayStockTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ASPTransactionReportByCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="vdist" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="ChartOnLineUserCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ChartRollWiseEmployeeCounts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ChartSingleTollWiseAndDateWiseVehicleDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -1465,7 +1468,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         <Function Name="ReportTodaySettlementAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ReportTodayTrip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ReportTodayTripAmountByCollectionMode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="S" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="salesreport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="salesreportbyDistributorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vdistid" Type="varchar" Mode="In" />
@@ -2958,6 +2960,9 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           </FunctionImport>
           <FunctionImport Name="ASPTollpayStock" ReturnType="Collection(DP_TPModel.ASPTollpayStock_Result)" />
           <FunctionImport Name="ASPTollpayStockTags" ReturnType="Collection(DP_TPModel.ASPTollpayStockTags_Result)" />
+          <FunctionImport Name="ASPTransactionReportByCustomer" ReturnType="Collection(DP_TPModel.ASPTransactionReportByCustomer_Result)">
+            <Parameter Name="vdist" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="ChartOnLineUserCount" ReturnType="Collection(DP_TPModel.ChartOnLineUserCount_Result)" />
           <FunctionImport Name="ChartRollWiseEmployeeCounts" ReturnType="Collection(DP_TPModel.ChartRollWiseEmployeeCounts_Result)" />
           <FunctionImport Name="ChartSingleTollWiseAndDateWiseVehicleDetails" ReturnType="Collection(DP_TPModel.ChartSingleTollWiseAndDateWiseVehicleDetails_Result)">
@@ -3109,7 +3114,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <FunctionImport Name="ReportTodaySettlementAmount" ReturnType="Collection(DP_TPModel.ReportTodaySettlementAmount_Result)" />
           <FunctionImport Name="ReportTodayTrip" ReturnType="Collection(DP_TPModel.ReportTodayTrip_Result)" />
           <FunctionImport Name="ReportTodayTripAmountByCollectionMode" ReturnType="Collection(DP_TPModel.ReportTodayTripAmountByCollectionMode_Result)" />
-          <FunctionImport Name="S" ReturnType="Collection(Int32)" />
           <FunctionImport Name="salesreport" ReturnType="Collection(DP_TPModel.salesreport_Result)" />
           <FunctionImport Name="salesreportbyDistributorId" ReturnType="Collection(DP_TPModel.salesreportbyDistributorId_Result)">
             <Parameter Name="vdistid" Mode="In" Type="String" />
@@ -3535,6 +3539,11 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="String" Name="Serial_Number" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="Lot_Number" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="ASPTransactionReportByCustomer_Result">
+          <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="250" />
+          <Property Type="Decimal" Name="creadit" Nullable="true" Precision="19" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="ChartOnLineUserCount_Result">
           <Property Type="Int32" Name="StaffCount" Nullable="true" />
           <Property Type="String" Name="Role" Nullable="false" MaxLength="13" />
@@ -3884,12 +3893,12 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="Double" Name="rates_seven_plus_axle_monthly" Nullable="true" />
         </ComplexType>
         <ComplexType Name="UsersBy_OwnerID_Result">
-          <Property Type="Int32" Name="userid" Nullable="true" />
-          <Property Type="String" Name="uservehicleType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="uservehicleRegNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="srno" Nullable="false" />
           <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="uservehicleRegNo" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="UserTripStatus_Result">
           <Property Type="Int32" Name="tripId" Nullable="true" />
@@ -5667,6 +5676,15 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ASPTransactionReportByCustomer" FunctionName="DP_TPModel.Store.ASPTransactionReportByCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.ASPTransactionReportByCustomer_Result">
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="creadit" ColumnName="creadit" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ChartOnLineUserCount" FunctionName="DP_TPModel.Store.ChartOnLineUserCount">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ChartOnLineUserCount_Result">
@@ -6062,7 +6080,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="S" FunctionName="DP_TPModel.Store.S" />
           <FunctionImportMapping FunctionImportName="salesreport" FunctionName="DP_TPModel.Store.salesreport">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.salesreport_Result">
@@ -6198,12 +6215,12 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <FunctionImportMapping FunctionImportName="UsersBy_OwnerID" FunctionName="DP_TPModel.Store.UsersBy_OwnerID">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.UsersBy_OwnerID_Result">
-                <ScalarProperty Name="userid" ColumnName="userid" />
-                <ScalarProperty Name="uservehicleType" ColumnName="uservehicleType" />
-                <ScalarProperty Name="uservehicleRegNo" ColumnName="uservehicleRegNo" />
+                <ScalarProperty Name="srno" ColumnName="srno" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="uservehicleRegNo" ColumnName="uservehicleRegNo" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
