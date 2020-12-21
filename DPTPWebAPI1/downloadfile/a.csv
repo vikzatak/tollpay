@@ -1,2 +1,0 @@
-Status,Source table,Target table,Total rows,Migrated rows,Success rate,Duration (DD:HH:MM:SS:MS),Error messages
-"Initial","`aioccrm`.`phonecalls`",,,,"N/A",,

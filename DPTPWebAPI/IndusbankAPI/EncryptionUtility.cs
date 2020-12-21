@@ -45,7 +45,7 @@ namespace IndusAPIMiddleWareAPI.Helperclasses
         public string InputVal { get; set; }
     }
 
-    public class TagReplacement
+    public class clsTagReplacement
     {
         public string ReplaceSerialNo { get; set; }
         public string TagAccountNo { get; set; }

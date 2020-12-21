@@ -42,5 +42,6 @@ namespace DPTPWebAPI
         public string KycProofImage { get; set; }
         public Nullable<int> DistributorID { get; set; }
         public string isOTPVerified { get; set; }
+        public string BankStatus { get; set; }
     }
 }

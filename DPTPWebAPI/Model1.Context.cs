@@ -74,8 +74,8 @@ namespace DPTPWebAPI
         public virtual DbSet<RFID_Tracker> RFID_Tracker { get; set; }
         public virtual DbSet<RouteTollsQuery> RouteTollsQueries { get; set; }
         public virtual DbSet<RTO> RTOes { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<tagActivateSuspendClose> tagActivateSuspendCloses { get; set; }
+        public virtual DbSet<TagReplacementReq> TagReplacementReqs { get; set; }
         public virtual DbSet<TollPayWallet> TollPayWallets { get; set; }
         public virtual DbSet<TollPlaza> TollPlazas { get; set; }
         public virtual DbSet<TollPlazaEmployee> TollPlazaEmployees { get; set; }
@@ -95,6 +95,7 @@ namespace DPTPWebAPI
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserTollTracker> UserTollTrackers { get; set; }
         public virtual DbSet<HistoryTollPlazza> HistoryTollPlazzas { get; set; }
+        public virtual DbSet<IndusInd_walletRecharge> IndusInd_walletRecharge { get; set; }
     
         public virtual ObjectResult<AccountingofTagStackByDistributor_Result> AccountingofTagStackByDistributor(string vdist)
         {
@@ -1009,6 +1010,11 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DistributorAndTeamUnSoldsTags_Result>("DistributorAndTeamUnSoldsTags", vdistidParameter);
         }
     
+        public virtual ObjectResult<DistributorTagRequest_Result> DistributorTagRequest()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DistributorTagRequest_Result>("DistributorTagRequest");
+        }
+    
         public virtual int dontClickClearTrips()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("dontClickClearTrips");
@@ -1036,9 +1042,48 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FastagRechargeTransactionByCustomer_Result>("FastagRechargeTransactionByCustomer", custUsernameParameter);
         }
     
+        public virtual ObjectResult<FASTagRechargeTransactionByDist_ID_Result> FASTagRechargeTransactionByDist_ID(string dist_ID)
+        {
+            var dist_IDParameter = dist_ID != null ?
+                new ObjectParameter("Dist_ID", dist_ID) :
+                new ObjectParameter("Dist_ID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FASTagRechargeTransactionByDist_ID_Result>("FASTagRechargeTransactionByDist_ID", dist_IDParameter);
+        }
+    
+        public virtual ObjectResult<FASTagRechargeTransactionByDist_ID_Date_Result> FASTagRechargeTransactionByDist_ID_Date(string dist_ID, Nullable<System.DateTime> start_date, Nullable<System.DateTime> end_date)
+        {
+            var dist_IDParameter = dist_ID != null ?
+                new ObjectParameter("Dist_ID", dist_ID) :
+                new ObjectParameter("Dist_ID", typeof(string));
+    
+            var start_dateParameter = start_date.HasValue ?
+                new ObjectParameter("Start_date", start_date) :
+                new ObjectParameter("Start_date", typeof(System.DateTime));
+    
+            var end_dateParameter = end_date.HasValue ?
+                new ObjectParameter("End_date", end_date) :
+                new ObjectParameter("End_date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FASTagRechargeTransactionByDist_ID_Date_Result>("FASTagRechargeTransactionByDist_ID_Date", dist_IDParameter, start_dateParameter, end_dateParameter);
+        }
+    
         public virtual ObjectResult<FastagTransaction_Result> FastagTransaction()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FastagTransaction_Result>("FastagTransaction");
+        }
+    
+        public virtual ObjectResult<FastagTransactionByDate_Result> FastagTransactionByDate(Nullable<System.DateTime> start_date, Nullable<System.DateTime> end_date)
+        {
+            var start_dateParameter = start_date.HasValue ?
+                new ObjectParameter("start_date", start_date) :
+                new ObjectParameter("start_date", typeof(System.DateTime));
+    
+            var end_dateParameter = end_date.HasValue ?
+                new ObjectParameter("end_date", end_date) :
+                new ObjectParameter("end_date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FastagTransactionByDate_Result>("FastagTransactionByDate", start_dateParameter, end_dateParameter);
         }
     
         public virtual ObjectResult<GetDailyTickets_Result> GetDailyTickets(Nullable<int> tollPlazaID)
@@ -1262,27 +1307,6 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SolDCount");
         }
     
-        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
-        {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            var versionParameter = version.HasValue ?
-                new ObjectParameter("version", version) :
-                new ObjectParameter("version", typeof(int));
-    
-            var definitionParameter = definition != null ?
-                new ObjectParameter("definition", definition) :
-                new ObjectParameter("definition", typeof(byte[]));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
-        }
-    
         public virtual int sp_BackupDatabases(string databaseName, string backupType, string backupLocation)
         {
             var databaseNameParameter = databaseName != null ?
@@ -1300,91 +1324,14 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_BackupDatabases", databaseNameParameter, backupTypeParameter, backupLocationParameter);
         }
     
-        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
-        {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            var versionParameter = version.HasValue ?
-                new ObjectParameter("version", version) :
-                new ObjectParameter("version", typeof(int));
-    
-            var definitionParameter = definition != null ?
-                new ObjectParameter("definition", definition) :
-                new ObjectParameter("definition", typeof(byte[]));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
-        }
-    
-        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
-        {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
-        }
-    
-        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
-        {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
-        }
-    
-        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
-        {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
-        }
-    
         public virtual ObjectResult<SP_Map_NCPI_TollPlaza_Result> SP_Map_NCPI_TollPlaza()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Map_NCPI_TollPlaza_Result>("SP_Map_NCPI_TollPlaza");
         }
     
-        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        public virtual ObjectResult<TagReplacementReport_Result> TagReplacementReport()
         {
-            var diagramnameParameter = diagramname != null ?
-                new ObjectParameter("diagramname", diagramname) :
-                new ObjectParameter("diagramname", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(int));
-    
-            var new_diagramnameParameter = new_diagramname != null ?
-                new ObjectParameter("new_diagramname", new_diagramname) :
-                new ObjectParameter("new_diagramname", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
-        }
-    
-        public virtual int sp_upgraddiagrams()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TagReplacementReport_Result>("TagReplacementReport");
         }
     
         public virtual ObjectResult<TagStackByDistributor_Result> TagStackByDistributor(string vdist)
@@ -1399,6 +1346,11 @@ namespace DPTPWebAPI
         public virtual ObjectResult<TodayVehicleByType_Result> TodayVehicleByType()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TodayVehicleByType_Result>("TodayVehicleByType");
+        }
+    
+        public virtual ObjectResult<TollpayStockCost_Result> TollpayStockCost()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TollpayStockCost_Result>("TollpayStockCost");
         }
     
         public virtual ObjectResult<TollPayTagStack_Result> TollPayTagStack()
@@ -1435,15 +1387,6 @@ namespace DPTPWebAPI
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateTollTripAmt", vTripIdParameter);
         }
     
-        public virtual ObjectResult<UsersBy_OwnerID_Result> UsersBy_OwnerID(Nullable<int> ownerID)
-        {
-            var ownerIDParameter = ownerID.HasValue ?
-                new ObjectParameter("ownerID", ownerID) :
-                new ObjectParameter("ownerID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UsersBy_OwnerID_Result>("UsersBy_OwnerID", ownerIDParameter);
-        }
-    
         public virtual ObjectResult<UserTripStatus_Result> UserTripStatus(Nullable<int> userno)
         {
             var usernoParameter = userno.HasValue ?
@@ -1451,6 +1394,117 @@ namespace DPTPWebAPI
                 new ObjectParameter("userno", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UserTripStatus_Result>("UserTripStatus", usernoParameter);
+        }
+    
+        public virtual ObjectResult<VTP_GetNearestVehicles_Result> VTP_GetNearestVehicles(Nullable<double> startlat, Nullable<double> startlng)
+        {
+            var startlatParameter = startlat.HasValue ?
+                new ObjectParameter("startlat", startlat) :
+                new ObjectParameter("startlat", typeof(double));
+    
+            var startlngParameter = startlng.HasValue ?
+                new ObjectParameter("startlng", startlng) :
+                new ObjectParameter("startlng", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTP_GetNearestVehicles_Result>("VTP_GetNearestVehicles", startlatParameter, startlngParameter);
+        }
+    
+        public virtual ObjectResult<VTP_UsersBy_OwnerID_Result> VTP_UsersBy_OwnerID(Nullable<int> ownerID)
+        {
+            var ownerIDParameter = ownerID.HasValue ?
+                new ObjectParameter("ownerID", ownerID) :
+                new ObjectParameter("ownerID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTP_UsersBy_OwnerID_Result>("VTP_UsersBy_OwnerID", ownerIDParameter);
+        }
+    
+        public virtual ObjectResult<TagClosureReport_Result> TagClosureReport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TagClosureReport_Result>("TagClosureReport");
+        }
+    
+        public virtual ObjectResult<VTP_GetVehicleClassDetailsByDistID_Result> VTP_GetVehicleClassDetailsByDistID(Nullable<int> distID)
+        {
+            var distIDParameter = distID.HasValue ?
+                new ObjectParameter("distID", distID) :
+                new ObjectParameter("distID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTP_GetVehicleClassDetailsByDistID_Result>("VTP_GetVehicleClassDetailsByDistID", distIDParameter);
+        }
+    
+        public virtual ObjectResult<string> VTP_GetVehicleTypeByDistID(Nullable<int> distID)
+        {
+            var distIDParameter = distID.HasValue ?
+                new ObjectParameter("distID", distID) :
+                new ObjectParameter("distID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("VTP_GetVehicleTypeByDistID", distIDParameter);
+        }
+    
+        public virtual ObjectResult<string> VTP_TPUpdateWalletInfo()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("VTP_TPUpdateWalletInfo");
+        }
+    
+        public virtual ObjectResult<ASTP_Result> ASTP(string vdistidint)
+        {
+            var vdistidintParameter = vdistidint != null ?
+                new ObjectParameter("vdistidint", vdistidint) :
+                new ObjectParameter("vdistidint", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ASTP_Result>("ASTP", vdistidintParameter);
+        }
+    
+        public virtual ObjectResult<DistributorUnSoldStock_Result> DistributorUnSoldStock(string distID)
+        {
+            var distIDParameter = distID != null ?
+                new ObjectParameter("DistID", distID) :
+                new ObjectParameter("DistID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DistributorUnSoldStock_Result>("DistributorUnSoldStock", distIDParameter);
+        }
+    
+        public virtual ObjectResult<TagClosureReportByDate_Result> TagClosureReportByDate(Nullable<System.DateTime> start_date, Nullable<System.DateTime> end_date)
+        {
+            var start_dateParameter = start_date.HasValue ?
+                new ObjectParameter("start_date", start_date) :
+                new ObjectParameter("start_date", typeof(System.DateTime));
+    
+            var end_dateParameter = end_date.HasValue ?
+                new ObjectParameter("end_date", end_date) :
+                new ObjectParameter("end_date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TagClosureReportByDate_Result>("TagClosureReportByDate", start_dateParameter, end_dateParameter);
+        }
+    
+        public virtual ObjectResult<TagReplacementReportByDate_Result> TagReplacementReportByDate(Nullable<System.DateTime> start_date, Nullable<System.DateTime> end_date)
+        {
+            var start_dateParameter = start_date.HasValue ?
+                new ObjectParameter("start_date", start_date) :
+                new ObjectParameter("start_date", typeof(System.DateTime));
+    
+            var end_dateParameter = end_date.HasValue ?
+                new ObjectParameter("end_date", end_date) :
+                new ObjectParameter("end_date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TagReplacementReportByDate_Result>("TagReplacementReportByDate", start_dateParameter, end_dateParameter);
+        }
+    
+        public virtual ObjectResult<DistributStatistics_Result> DistributStatistics(string vdistid, Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate)
+        {
+            var vdistidParameter = vdistid != null ?
+                new ObjectParameter("vdistid", vdistid) :
+                new ObjectParameter("vdistid", typeof(string));
+    
+            var startdateParameter = startdate.HasValue ?
+                new ObjectParameter("startdate", startdate) :
+                new ObjectParameter("startdate", typeof(System.DateTime));
+    
+            var enddateParameter = enddate.HasValue ?
+                new ObjectParameter("enddate", enddate) :
+                new ObjectParameter("enddate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DistributStatistics_Result>("DistributStatistics", vdistidParameter, startdateParameter, enddateParameter);
         }
     }
 }

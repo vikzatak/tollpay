@@ -70,10 +70,10 @@ namespace DPTPWebAPI.IndusbankAPI
 
             //check if tagsrno alredy exist update this record
             //IndusInd_TagRegistration itr=db.IndusInd_TagRegistration.Where(t=>t.)
-           
-          
 
-                db.IndusInd_TagRegistration.Add(new IndusInd_TagRegistration()
+
+
+            db.IndusInd_TagRegistration.Add(new IndusInd_TagRegistration()
             {
                 DistributorId = Convert.ToInt32(ObjTPTagReg.DistributorId),
                 CustomerAccountType = ObjTPTagReg.AccountType,
@@ -86,9 +86,11 @@ namespace DPTPWebAPI.IndusbankAPI
                 CustomerVehicleTagDetails = JsonConvert.SerializeObject(ObjTPTagReg.VehicleInfo),
                 OrderStatus = obj.StatusCode,
                 OrderDateTime = DateTime.Now,
+                BankStatus = obj.Status,
+                
 
 
-            });
+            }) ;
             db.SaveChanges();
 
           
@@ -103,6 +105,7 @@ namespace DPTPWebAPI.IndusbankAPI
                     er.ecom_axis_WalletID = ObjTPTagReg.MobileNo;
                     er.ecom_CustomerFName = obj.OrderNo;
                     er.ecom_CreatedDate = DateTime.Now;
+                    er.BankStatus = obj.Status;
                     if (ObjTPTagReg.DistributorId != null)
                     {
                         er.ecom_DistributionID = Convert.ToInt32(ObjTPTagReg.DistributorId);
@@ -121,6 +124,7 @@ namespace DPTPWebAPI.IndusbankAPI
                     er.ecom_axis_WalletID = ObjTPTagReg.MobileNo;
                     er.ecom_CustomerLName = obj.OrderNo;
                     er.ecom_CreatedDate = DateTime.Now;
+                    er.BankStatus = obj.Status;
                     if (ObjTPTagReg.DistributorId != null)
                     {
                         er.ecom_DistributionID = Convert.ToInt32(ObjTPTagReg.DistributorId);

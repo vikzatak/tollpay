@@ -28,5 +28,7 @@ namespace DPTPWebAPI
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string RC_FrontImage { get; set; }
         public string RC_BackImage { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
     }
 }

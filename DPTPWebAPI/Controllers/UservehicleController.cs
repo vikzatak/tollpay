@@ -11,6 +11,12 @@ using System.Web.Http.Description;
 
 namespace DPTPWebAPI.Controllers
 {
+    public class clsCustomerDetail
+    {
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+    }
+
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UservehicleController : ApiController
     {
@@ -96,6 +102,9 @@ namespace DPTPWebAPI.Controllers
                 {
                     UV.userid = user_V.userid;
                     UV.CreatedDate = DateTime.Now;
+                    UV.Latitude = user_V.Latitude;
+                    UV.Longitude = user_V.Longitude;
+
                     db.SaveChanges();
                 }
                 else
@@ -112,6 +121,11 @@ namespace DPTPWebAPI.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = user_V.srno }, user_V);
         }
+
+
+       
+
+
         [JwtAuthentication]
         // DELETE: api/Uservehicle/5
         [ResponseType(typeof(User_Vehicle))]
@@ -150,7 +164,37 @@ namespace DPTPWebAPI.Controllers
         public HttpResponseMessage GetUsersByOwnersId(HttpRequestMessage request, dist ownerID)
         {
             int VownerId=Convert.ToInt32(ownerID.distributorid);
-            return request.CreateResponse(HttpStatusCode.OK, db.UsersBy_OwnerID(VownerId));
+            return request.CreateResponse(HttpStatusCode.OK, db.VTP_UsersBy_OwnerID(VownerId));
+        }//method end
+
+        [JwtAuthentication]
+        // GET: api/Uservehicle/5
+        [Route("TPapi/GetNearestVehicles")]
+        [HttpPost]
+        public HttpResponseMessage GetNearestVehicles(HttpRequestMessage request, clsCustomerDetail ccd)
+        {
+            
+            return request.CreateResponse(HttpStatusCode.OK, db.VTP_GetNearestVehicles(ccd.latitude, ccd.longitude));
+        }//method end
+
+        [JwtAuthentication]
+        // GET: api/Uservehicle/5
+        [Route("api/GetVehicleNoByRiderId")]
+        [HttpPost]
+        public HttpResponseMessage GetVehicleNoByRiderId(HttpRequestMessage request, dist ownerID)
+        {
+            if (ownerID != null)
+            {
+                int VownerId = Convert.ToInt32(ownerID.distributorid);
+                
+                return request.CreateResponse(HttpStatusCode.OK, db.User_Vehicle.Where(x=>x.userid==VownerId).ToList());
+            }
+            else
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest);
+            } 
+
+            
         }//method end
     }
 }

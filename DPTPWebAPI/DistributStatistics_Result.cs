@@ -11,10 +11,12 @@ namespace DPTPWebAPI
 {
     using System;
     
-    public partial class ASPOutwardReportDayWiseQuantityByDistributor_Result
+    public partial class DistributStatistics_Result
     {
-        public string Vehicle_Type { get; set; }
-        public Nullable<int> TagCount { get; set; }
-        public string ImportDate { get; set; }
+        public Nullable<int> TagSoldCount { get; set; }
+        public Nullable<int> TagUnSoldCount { get; set; }
+        public Nullable<int> DistTeamSalesPersonCount { get; set; }
+        public Nullable<int> DistTeamCustomerCount { get; set; }
+        public Nullable<decimal> DistAmountBalance { get; set; }
     }
 }

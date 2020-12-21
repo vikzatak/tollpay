@@ -25,7 +25,13 @@ namespace ConsoleAppAxisToken
         public string easebuzzsalt { get; set; }
         public string easebuzzkey { get; set; }
         public string easebuzzenv { get; set; }
+
+        public string payUsalt { get; set; }
+        public string payUkey { get; set; }
+        public string payUenv { get; set; }
     }
+
+
     public class clsdecryptedResult
     {
         public string decryptedResult { get; set; }
@@ -54,16 +60,16 @@ namespace ConsoleAppAxisToken
         {
             DP_TPEntities db = new DP_TPEntities();
             JwtAuthManager jwt = new JwtAuthManager();
-            foreach (var item in db.AppKeys.ToList())
-            {
-
-            }  
+             
 
             string Key = db.AppKeys.Where(x => x.vKey == "key").FirstOrDefault().vvalue;
             string XIBMClientId = db.AppKeys.Where(x => x.vKey == "XIBMClientId").FirstOrDefault().vvalue;
             string easebuzzsalt = db.AppKeys.Where(x => x.vKey == "easebuzzsalt").FirstOrDefault().vvalue;
             string easebuzzkey = db.AppKeys.Where(x => x.vKey == "easebuzzkey").FirstOrDefault().vvalue;
             string easebuzzenv = db.AppKeys.Where(x => x.vKey == "easebuzzenv").FirstOrDefault().vvalue;
+            string payUsalt = db.AppKeys.Where(x => x.vKey == "payUsalt").FirstOrDefault().vvalue;
+            string payUkey = db.AppKeys.Where(x => x.vKey == "payUkey").FirstOrDefault().vvalue;
+            string payUzenv = db.AppKeys.Where(x => x.vKey == "payUenv").FirstOrDefault().vvalue;
             string XIBMClientSecret = db.AppKeys.Where(x => x.vKey == "XIBMClientSecret").FirstOrDefault().vvalue;
             string SessionKey= DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
             string AxisSetuAPIURL= db.AppKeys.Where(x => x.vKey == "AxisSetuAPIURL").FirstOrDefault().vvalue;
@@ -74,7 +80,10 @@ namespace ConsoleAppAxisToken
                 easebuzzenv=easebuzzenv,
                 easebuzzkey=easebuzzkey,
                 easebuzzsalt=easebuzzsalt,
-                AxisSetuAPIURL= AxisSetuAPIURL
+                AxisSetuAPIURL= AxisSetuAPIURL,
+                payUsalt = payUsalt,
+                payUkey = payUkey,
+                payUenv = payUzenv
             };
 
         }

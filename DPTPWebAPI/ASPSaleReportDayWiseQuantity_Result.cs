@@ -14,7 +14,7 @@ namespace DPTPWebAPI
     public partial class ASPSaleReportDayWiseQuantity_Result
     {
         public string Vehicle_Type { get; set; }
-        public Nullable<int> Tag_Count { get; set; }
-        public string Date { get; set; }
+        public Nullable<int> TagCount { get; set; }
+        public string ImportDate { get; set; }
     }
 }

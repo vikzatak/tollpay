@@ -18,6 +18,5 @@ namespace DPTPWebAPI
         public Nullable<decimal> Credit { get; set; }
         public string Payment_Type { get; set; }
         public string Transaction_Date { get; set; }
-        public string addedon { get; set; }
     }
 }

@@ -52,4 +52,36 @@ namespace DPTPWebAPI.Controllers
 
         }
     }
+
+    /*[JwtAuthentication]
+    [Route("api/PayUBizPayment")]
+    [HttpPost]
+    public HttpResponseMessage PayUBizPayment(HttpRequestMessage request, paymentdetails pd)
+    {
+        if (!ModelState.IsValid || pd == null)
+        {
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+
+        clsKeyValue ckv = EncryptionLibrary.GetKeys();
+        string amount = pd.amount;
+        string firstname = pd.firstname;
+        string email = pd.email;
+        string phone = pd.phone;
+        string productinfo = pd.productinfo;
+
+        string surl = "https://payment.tollpay.in/success.aspx";  //Request.Form["surl"].Trim();
+
+        string furl = "https://payment.tollpay.in/success.aspx"; //Request.Form["furl"].Trim();
+
+        string Txnid = ckv.SessionID;
+        //call the object of class and start payment
+        Easebuzz t = new Easebuzz(ckv.easebuzzsalt, ckv.easebuzzkey, ckv.easebuzzenv);
+
+        string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl, Txnid);
+
+        return request.CreateResponse(HttpStatusCode.OK, strForm);
+
+    }*/
 }
+

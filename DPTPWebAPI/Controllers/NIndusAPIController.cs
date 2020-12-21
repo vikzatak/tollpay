@@ -19,6 +19,16 @@ using System.Web.Http.Results;
 namespace DPTPWebAPI.Controllers
 {
 
+    public class clsBankTagReplacement
+    {
+        public string ReplaceSerialNo { get; set; }
+        public string TagAccountNo { get; set; }
+        public string Reason { get; set; }
+        public string TagCost { get; set; }
+        public string TransactionID { get; set; }
+    }
+
+
     public class ClsTagClosureOTPResponse
     {
         public string StatusCode { get; set; }
@@ -439,6 +449,7 @@ namespace DPTPWebAPI.Controllers
                             icr.RegionID = cust.RegionID;
                             icr.StateID = cust.StateID;
                             icr.TollPayCustId = cust.TollPayCustId;
+                            icr.BankStatus = cust.BankStatus;
                             db.SaveChanges();
                         }
                         else //if not exist add customer
@@ -746,6 +757,8 @@ namespace DPTPWebAPI.Controllers
             return Ok(obj);
         }
 
+
+
         [JwtAuthentication]
         [Route("api/FindWalletInfo")]
         public IHttpActionResult Postgetwalletinfo([FromBody] ClsInputWalletInfo objinputwallett)
@@ -798,9 +811,25 @@ namespace DPTPWebAPI.Controllers
                         {
                             string mobileno = obj.WalletInfoDetails[0].MobileNo;
                             IndusInd_CustomerRegistration cust = db.IndusInd_CustomerRegistration.Where(o => o.MobileNumber == mobileno).FirstOrDefault();
+                            if(cust != null)
+                            {
+                                obj.WalletInfoDetails[0].PANNO = cust.PANNo;
+                                obj.WalletInfoDetails[0].AddharNO = cust.Aadhaarno;
 
-                            obj.WalletInfoDetails[0].PANNO = cust.PANNo;
-                            obj.WalletInfoDetails[0].AddharNO = cust.Aadhaarno;
+                            }
+                            else
+                            {
+                                obj.WalletInfoDetails[0].PANNO = null;
+                                obj.WalletInfoDetails[0].AddharNO = null;
+                            }
+                            
+
+                            //foreach (var item in obj.TagInfo)
+                            //{
+                            //    ecom_RFID ecru = db.ecom_RFID.Where(y => y.Serial_Number == item.SerialNo).FirstOrDefault();
+                            //    ecru.TagAcctID = item.TagAccountNo;
+                            //    db.SaveChanges();
+                            //}
                         }
                         return Ok(obj);
 
@@ -819,18 +848,105 @@ namespace DPTPWebAPI.Controllers
         }
 
         [JwtAuthentication]
+        [Route("api/TPUpdateWalletInfo")]
+        public IHttpActionResult TPUpdateWalletInfo([FromBody] ClsInputWalletInfo objinputwallett)
+        {
+
+            List<string> lstMobile = db.VTP_TPUpdateWalletInfo().ToList();
+            foreach (var mitem in lstMobile)
+            {
+
+
+
+                ClsInputWalletInfo walletInputObj = new ClsInputWalletInfo() { MobileNumber = mitem }; //objinputwallett.MobileNumber
+
+                clsRespFindWalletInfo obj = null;
+
+                string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/getwalletinfo";
+                string methodtype = "POST";
+                string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                else
+                {
+                    string walletInput = JsonConvert.SerializeObject(walletInputObj);
+                    //  Console.WriteLine(walletInput);
+                    string encryptedwalletInput = EncryptionsUtility.AES_ENCRYPT(walletInput, AESkey);
+
+                    ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedwalletInput };
+                    string walletInputserial = JsonConvert.SerializeObject(objRequestData);
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    var client = new RestClient(strulr);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("Authorization", thetoken);
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddParameter("application/json", walletInputserial, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+
+                    if (response == null)
+                    {
+                        BadRequest();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                            var x = json.ResponseData;// this extracts the encrypted requesttoken;
+
+                            string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
+                            Console.WriteLine(s1);
+                            obj = JsonConvert.DeserializeObject<clsRespFindWalletInfo>(s1);
+
+                            if (obj.StatusCode == "000")
+                            {
+                                //string mobileno = obj.WalletInfoDetails[0].MobileNo;
+                                //IndusInd_CustomerRegistration cust = db.IndusInd_CustomerRegistration.Where(o => o.MobileNumber == mobileno).FirstOrDefault();
+
+                                //obj.WalletInfoDetails[0].PANNO = cust.PANNo;
+                                //obj.WalletInfoDetails[0].AddharNO = cust.Aadhaarno;
+
+                                foreach (var item in obj.TagInfo)
+                                {
+                                    ecom_RFID ecru = db.ecom_RFID.Where(y => y.Serial_Number == item.SerialNo).FirstOrDefault();
+                                    ecru.TagAcctID = item.TagAccountNo;
+                                    db.SaveChanges();
+                                }
+                            }
+                            //return Ok(obj);
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return BadRequest(ex.Message);
+                        }
+
+                    }
+
+                }
+            }
+            return Ok(1);
+
+        }
+
+        [JwtAuthentication]
         [Route("api/WalletRecharge")]
         public IHttpActionResult PostWalletRecharge([FromBody] ClsRechargeWallet objRechargeWallet)
         {
+            string IPAddress = HttpContext.Current != null ? HttpContext.Current.Request.UserHostAddress : "";
             string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/recharge_wallet";
             string methodtype = "POST";
             string thetoken = EncryptionsUtility.getheader(strulr, methodtype);
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && IPAddress == "::1")
             {
                 return BadRequest(ModelState);
             }
-            else
-            {
+            else if(IPAddress == "13.235.39.165")
+            { 
 
                 //test data from API doc
                 //ClsRechargeWallet objWallet = new ClsRechargeWallet()
@@ -883,6 +999,19 @@ namespace DPTPWebAPI.Controllers
                         var resData = json.ResponseData;// this extracts the encrypted requesttoken;
                         string decResult = EncryptionsUtility.AES_DECRYPT(resData, AESkey);
                         ResponseWalletRecharge objCities = JsonConvert.DeserializeObject<ResponseWalletRecharge>(decResult);
+                        IndusInd_walletRecharge ivr = new IndusInd_walletRecharge();
+
+                        ivr.Amount = Convert.ToInt32(objRechargeWallet.Amount);
+                        ivr.MobileNumber = objRechargeWallet.MobileNumber;
+                        ivr.PaymentType = Convert.ToInt32(objRechargeWallet.PaymentType);
+                        ivr.RechargePercentage = Convert.ToDecimal(objRechargeWallet.RechargePercentage);
+                        ivr.TagAccountNo = objRechargeWallet.TagAccountNo;
+                        ivr.TotalAmount = Convert.ToDecimal(objRechargeWallet.TotalAmount);
+                        ivr.TransactionID = objRechargeWallet.TransactionID;
+                        ivr.Transac_IPAddress = objRechargeWallet.TransactionID;
+                        ivr.BankStatus = objCities.Status;
+                        db.IndusInd_walletRecharge.Add(ivr);
+                        db.SaveChanges();
                         return Ok(objCities);
                     }
                     catch (Exception ex)
@@ -894,6 +1023,10 @@ namespace DPTPWebAPI.Controllers
                 }
 
 
+            }
+            else
+            {
+                return BadRequest();
             }
 
         }
@@ -1107,11 +1240,12 @@ namespace DPTPWebAPI.Controllers
                         ResposeTagRootobject obj = JsonConvert.DeserializeObject<ResposeTagRootobject>(s1);
                         Distributor_UsersApp dua = new Distributor_UsersApp();
 
-
+                        
                         if (obj.StatusCode == "000")
                         {
                             foreach (var vehicle in obj.VehicleInfo)
                             {
+                                
                                 if (vehicle.StatusCode == "000")
                                 {
                                     dua.distributorFasttag(obj, ObjTPTagReg);
@@ -1208,7 +1342,7 @@ namespace DPTPWebAPI.Controllers
 
         [JwtAuthentication]
         [Route("api/TagReplacement")]
-        public IHttpActionResult TagReplacement([FromBody] TagReplacement objRepTag)
+        public IHttpActionResult TagReplacement([FromBody] clsTagReplacement ctr)
         {
             string strulr = "https://fastag.gitechnology.in/indusindAPI/api/BC/Tag/TagReplacement";
             string methodtype = "POST";
@@ -1221,46 +1355,117 @@ namespace DPTPWebAPI.Controllers
 
             {
 
-                string clsTagInput = JsonConvert.SerializeObject(objRepTag);
 
-                string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
-
-                ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedClsTagInput };
-                string clsTagInputserial = JsonConvert.SerializeObject(objRequestData);
-
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var client = new RestClient(strulr);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("Authorization", thetoken);
-                request.AddHeader("Content-Type", "application/json");
-                request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-                if (response == null)
+                TagReplacementReq vtrr = db.TagReplacementReqs.Where(z => (z.CustMobNo == ctr.custMobNo) && (z.VehicleNo == ctr.vehicleNo) && (z.SalesPersonID == ctr.SalesPersonID) && (z.OTP == ctr.OTP)).FirstOrDefault();
+                if (vtrr == null)
                 {
-                    return NotFound();
+                    return BadRequest("Invalid OTP for tag replacement");
                 }
+
                 else
                 {
-                    try
+
+
+
+                    ecom_RFID ecr = db.ecom_RFID.Where(x => x.Serial_Number == ctr.oldTagSrNo).FirstOrDefault();
+                    ecr.ecom_RFIDStatus = "r";
+                    db.SaveChanges();
+                    ecom_RFID ecrn = db.ecom_RFID.Where(x => x.Serial_Number == ctr.newTagSrNo).FirstOrDefault();
+                    ecrn.ecom_CustomerMobNo = ctr.custMobNo;
+                    ecrn.ecom_CustomerVehicleNo = ctr.vehicleNo;
+                    ecrn.ecom_RFIDStatus = "a";
+                    db.SaveChanges();
+                    //decimal amt = -100;
+                    DistributorCreditAccount dcr = new DistributorCreditAccount();
+                    dcr.Amount = Convert.ToDecimal("-100");
+                    dcr.DepositDate = DateTime.Now;
+                    string msg = dcr.DepositedVia;
+                    string tagSrNoNew = ctr.newTagSrNo;
+                    int lenOld = ctr.oldTagSrNo.Length;
+                    int lenNew = ctr.newTagSrNo.Length;
+                    dcr.distributorid = ctr.distID;
+                    dcr.DepositedVia = "Replaced old Srno. " + ctr.oldTagSrNo.Substring(lenOld - 4) + " new tag Srno. " + ctr.newTagSrNo.Substring(lenNew - 4);
+                    db.DistributorCreditAccounts.Add(dcr);
+
+                    db.SaveChanges();
+                    //update ecomRFID table row for old serial no. with status R
+                    //update ecomRFID table row for new serial no. with status A with customer's mob and vehicle no.
+                    //insert into DistributorCreditAccount a debit of -100 for tag replacement with srno.(last four character)
+
+                    //return request.CreateResponse(HttpStatusCode.OK, trr);
+
+                    clsBankTagReplacement objRepTag = new clsBankTagReplacement()
                     {
+                        Reason = ctr.reason,
+                        ReplaceSerialNo = ctr.newTagSrNo,
+                        TagAccountNo = ctr.tagAcctNo,
+                        TagCost = "100",
+                        TransactionID = DateTime.Now.ToString("yyyyMMddHHmmss")
 
-                        TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
-                        var x = json.ResponseData;// this extracts the encrypted requesttoken;
-                                                  //response decryption
 
-                        string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
-                        ClsCustRegResponse objrespone = JsonConvert.DeserializeObject<ClsCustRegResponse>(s1);
-                        return Ok(objrespone);
+                    };
+
+                    string clsTagInput = JsonConvert.SerializeObject(objRepTag);
+
+                    string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
+
+                    ClsRequestData objRequestData = new ClsRequestData() { RequestData = encryptedClsTagInput };
+                    string clsTagInputserial = JsonConvert.SerializeObject(objRequestData);
+
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    var client = new RestClient(strulr);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("Authorization", thetoken);
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+                    if (response == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            TokenResponse json = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                            var x = json.ResponseData;// this extracts the encrypted requesttoken;
+                                                      //response decryption
+
+                            string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
+                            ClsCustRegResponse objrespone = JsonConvert.DeserializeObject<ClsCustRegResponse>(s1);
+                            TagReplacementReq trr = vtrr;
+
+                            trr.ReqDate = DateTime.Now;
+                            trr.OldSrNo = ctr.oldTagSrNo;
+                            trr.NewSrNo = ctr.newTagSrNo;
+                            trr.CustMobNo = ctr.custMobNo;
+                            trr.VehicleNo = ctr.vehicleNo;
+                            trr.VehicleClass = ctr.vehicleClass;
+                            Random rnd = new Random();
+                            int value = rnd.Next(100000, 999999);
+                            trr.OTP = value;
+                            trr.Reason = ctr.reason;
+                            trr.SalesPersonID = ctr.SalesPersonID;
+                            trr.DistID = ctr.distID;
+                            trr.BankStatus = objrespone.Status;
+                            //db.TagReplacementReqs.Add(trr);
+                            db.SaveChanges();
+                            return Ok(objrespone);
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return BadRequest(ex.Message);
+                        }
 
                     }
-                    catch (Exception ex)
-                    {
 
-                        return BadRequest(ex.Message);
-                    }
 
-                }
+                }//else close
+
 
 
             }
@@ -1517,6 +1722,7 @@ namespace DPTPWebAPI.Controllers
 
             {
 
+
                 string clsTagInput = JsonConvert.SerializeObject(ckycu);
 
                 string encryptedClsTagInput = EncryptionsUtility.AES_ENCRYPT(clsTagInput, AESkey);
@@ -1532,6 +1738,8 @@ namespace DPTPWebAPI.Controllers
                 request.AddHeader("Content-Type", "application/json");
                 request.AddParameter("application/json", clsTagInputserial, ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
+
+
                 if (response == null)
                 {
                     return NotFound();
@@ -1547,6 +1755,16 @@ namespace DPTPWebAPI.Controllers
 
                         string s1 = EncryptionsUtility.AES_DECRYPT(x, AESkey);
                         ClsTagClosureReqResponse objrespone = JsonConvert.DeserializeObject<ClsTagClosureReqResponse>(s1);
+
+                        ecom_RFID ecr = db.ecom_RFID.Where(y => y.TagAcctID == ckycu.TagAccountNo).FirstOrDefault();
+                        ecr.ecom_RFIDStatus = "c";
+                        db.SaveChanges();
+                        ecom_RFID ecrd = db.ecom_RFID.Where(y => y.TagAcctID == ckycu.TagAccountNo).FirstOrDefault();
+                        ecrd.TagClosure_Date = DateTime.Now;
+                        db.ecom_RFID.Add(ecrd);
+                        db.SaveChanges();
+
+
                         return Ok(objrespone);
 
                     }

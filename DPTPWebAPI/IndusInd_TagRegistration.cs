@@ -26,5 +26,6 @@ namespace DPTPWebAPI
         public Nullable<int> DistributorId { get; set; }
         public Nullable<System.DateTime> OrderDateTime { get; set; }
         public string OrderStatus { get; set; }
+        public string BankStatus { get; set; }
     }
 }

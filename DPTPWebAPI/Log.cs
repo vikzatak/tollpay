@@ -15,7 +15,7 @@ namespace DPTPWebAPI
     public partial class Log
     {
         public int Id { get; set; }
-        public System.DateTime Date { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public string Thread { get; set; }
         public string Level { get; set; }
         public string Logger { get; set; }

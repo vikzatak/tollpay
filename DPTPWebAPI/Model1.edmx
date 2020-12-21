@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DP_TPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DP_TPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AF_DocTypeCodes">
           <Key>
             <PropertyRef Name="srno" />
@@ -480,6 +480,9 @@
           <Property Name="ecom.CustomerVehicleType" Type="nchar" MaxLength="10" />
           <Property Name="ecom.CustomerIdentity" Type="nvarchar(max)" />
           <Property Name="ecom.CreatedDate" Type="datetime2" Precision="7" />
+          <Property Name="TagAcctID" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankStatus" Type="nvarchar(max)" />
+          <Property Name="TagClosure_Date" Type="datetime2" Precision="7" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DP_TP.dbo.HistoryTollPlazza' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -584,7 +587,32 @@ warning 6002: The table/view 'DP_TP.dbo.HistoryTollPlazza' does not have a prima
           <Property Name="KycProofImage" Type="nvarchar(max)" />
           <Property Name="DistributorID" Type="int" />
           <Property Name="isOTPVerified" Type="nchar" MaxLength="10" />
+          <Property Name="BankStatus" Type="nvarchar(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DP_TP.dbo.IndusInd_IECRequest' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IndusInd_IECRequest">
+          <Property Name="SrNo" Type="int" />
+          <Property Name="Request_ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CHALLAN_CODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="Client_AccountNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Client_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Remitter_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remitter_AccountNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remitter_IFSC" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remitter_Bank" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remitter_Branch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remitter_UTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pay_Method" Type="nvarchar" MaxLength="50" />
+          <Property Name="Credit_AccountNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Inward_Ref_Num" Type="nvarchar" MaxLength="50" />
+          <Property Name="Credit_Time" Type="datetime2" Precision="7" />
+          <Property Name="Reserve1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reserve2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reserve3" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reserve4" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="IndusInd_Regions">
           <Key>
             <PropertyRef Name="RegionID" />
@@ -608,6 +636,7 @@ warning 6002: The table/view 'DP_TP.dbo.HistoryTollPlazza' does not have a prima
           <Property Name="DistributorId" Type="int" />
           <Property Name="OrderDateTime" Type="datetime" />
           <Property Name="OrderStatus" Type="nchar" MaxLength="10" />
+          <Property Name="BankStatus" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="IndusInd_TagStockDetails">
           <Key>
@@ -647,6 +676,21 @@ warning 6002: The table/view 'DP_TP.dbo.HistoryTollPlazza' does not have a prima
           <Property Name="SecurityDeposit" Type="numeric" Precision="8" Scale="4" Nullable="false" />
           <Property Name="CardCost" Type="numeric" Precision="8" Scale="4" Nullable="false" />
         </EntityType>
+        <EntityType Name="IndusInd_walletRecharge">
+          <Key>
+            <PropertyRef Name="SrNo" />
+          </Key>
+          <Property Name="SrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Transac_IPAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransactionID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentType" Type="int" Nullable="false" />
+          <Property Name="TagAccountNo" Type="varchar" MaxLength="30" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Amount" Type="money" Nullable="false" />
+          <Property Name="RechargePercentage" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TotalAmount" Type="money" Nullable="false" />
+          <Property Name="BankStatus" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="IssuerFASTag">
           <Key>
             <PropertyRef Name="srno" />
@@ -662,11 +706,11 @@ warning 6002: The table/view 'DP_TP.dbo.HistoryTollPlazza' does not have a prima
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Date" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="Thread" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Level" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Logger" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Message" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Date" Type="datetime2" Precision="7" />
+          <Property Name="Thread" Type="varchar" MaxLength="255" />
+          <Property Name="Level" Type="varchar" MaxLength="50" />
+          <Property Name="Logger" Type="varchar" MaxLength="255" />
+          <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="Exception" Type="varchar" MaxLength="2000" />
         </EntityType>
         <EntityType Name="MapperVehicleClass">
@@ -773,16 +817,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="_Place_" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="_State_" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="tagActivateSuspendClose">
           <Key>
             <PropertyRef Name="tagId" />
@@ -790,6 +824,24 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="tagId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="operationId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="walletId" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TagReplacementReq">
+          <Key>
+            <PropertyRef Name="SrNo" />
+          </Key>
+          <Property Name="SrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReqDate" Type="datetime" />
+          <Property Name="ApprovDate" Type="datetime" />
+          <Property Name="OldSrNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="NewSrNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="VehicleNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalesPersonID" Type="int" />
+          <Property Name="VehicleClass" Type="nvarchar" MaxLength="50" />
+          <Property Name="DistID" Type="int" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="50" />
+          <Property Name="OTP" Type="int" />
+          <Property Name="CustMobNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="BankStatus" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="TollPayWallet">
           <Key>
@@ -1022,6 +1074,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="CreatedDate" Type="datetime2" Precision="7" />
           <Property Name="RC_FrontImage" Type="nvarchar(max)" />
           <Property Name="RC_BackImage" Type="nvarchar(max)" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="6" />
         </EntityType>
         <EntityType Name="UserBankDetails">
           <Key>
@@ -1090,6 +1144,12 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="CreateDate" Type="datetime2" Precision="7" />
           <Property Name="isMulti" Type="nchar" MaxLength="1" />
         </EntityType>
+        <Function Name="f_GetfullNamebyMobNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName=" GetfullNamebyMobNo" ReturnType="nvarchar">
+          <Parameter Name="CustMobno" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="f_GetSalePersonNameByDist_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName=" GetSalePersonNameByDist_ID" ReturnType="nvarchar">
+          <Parameter Name="SalePersonName" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AccountingofTagStackByDistributor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vdist" Type="varchar" Mode="In" />
         </Function>
@@ -1351,6 +1411,15 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         <Function Name="DistributorAndTeamUnSoldsTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vdistid" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="DistributorTagRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="DistributorUnSoldStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DistID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="DistributStatistics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="vdistid" Type="varchar" Mode="In" />
+          <Parameter Name="startdate" Type="date" Mode="In" />
+          <Parameter Name="enddate" Type="date" Mode="In" />
+        </Function>
         <Function Name="dontClickClearTrips" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="FastagRechargeTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="start_date" Type="date" Mode="In" />
@@ -1359,8 +1428,22 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         <Function Name="FastagRechargeTransactionByCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustUsername" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="FASTagRechargeTransactionByDist_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Dist_ID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="FASTagRechargeTransactionByDist_ID_Date" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Dist_ID" Type="varchar" Mode="In" />
+          <Parameter Name="Start_date" Type="datetime" Mode="In" />
+          <Parameter Name="End_date" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="FastagTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="FastagTransactionByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="start_date" Type="datetime" Mode="In" />
+          <Parameter Name="end_date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Get_TruckTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="vehicleId" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetAmtForTrip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="money">
           <Parameter Name="tripid" Type="int" Mode="In" />
         </Function>
@@ -1380,6 +1463,9 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Parameter Name="vdist" Type="varchar" Mode="In" />
         </Function>
         <Function Name="GetDistributorFullNameList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetDistributorNameBySalesPerson_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="vSrNo" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetDistributorTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vDistributionID" Type="varchar" Mode="In" />
           <Parameter Name="vVehicle_Type" Type="varchar" Mode="In" />
@@ -1473,46 +1559,27 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Parameter Name="vdistid" Type="varchar" Mode="In" />
         </Function>
         <Function Name="SolDCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
         <Function Name="sp_BackupDatabases" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="databaseName" Type="nvarchar" Mode="In" />
           <Parameter Name="backupType" Type="char" Mode="In" />
           <Parameter Name="backupLocation" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
         <Function Name="SP_Map_NCPI_TollPlaza" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        <Function Name="TagClosureReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TagClosureReportByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="start_date" Type="datetime" Mode="In" />
+          <Parameter Name="end_date" Type="datetime" Mode="In" />
         </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TagReplacementReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TagReplacementReportByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="start_date" Type="date" Mode="In" />
+          <Parameter Name="end_date" Type="date" Mode="In" />
+        </Function>
         <Function Name="TagStackByDistributor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vdist" Type="varchar" Mode="In" />
         </Function>
         <Function Name="TodayVehicleByType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TollpayStockCost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="TollPayTagStack" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="TollRateFileCSV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="TP_GenerateFastTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -1521,11 +1588,19 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         <Function Name="updateTollTripAmt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="vTripId" Type="int" Mode="In" />
         </Function>
-        <Function Name="UsersBy_OwnerID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ownerID" Type="int" Mode="In" />
-        </Function>
         <Function Name="UserTripStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="VTP_GetNearestVehicles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startlat" Type="float" Mode="In" />
+          <Parameter Name="startlng" Type="float" Mode="In" />
+        </Function>
+        <Function Name="VTP_GetVehicleClassDetailsByDistID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="distID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="VTP_TPUpdateWalletInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="VTP_UsersBy_OwnerID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ownerID" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="DP_TPModelStoreContainer">
           <EntitySet Name="AF_DocTypeCodes" EntityType="Self.AF_DocTypeCodes" Schema="dbo" store:Type="Tables" />
@@ -1567,6 +1642,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySet Name="IndusInd_TagStockDetails" EntityType="Self.IndusInd_TagStockDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndusInd_Token_Secrete" EntityType="Self.IndusInd_Token_Secrete" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndusInd_VehicleClassDetails" EntityType="Self.IndusInd_VehicleClassDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndusInd_walletRecharge" EntityType="Self.IndusInd_walletRecharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssuerFASTag" EntityType="Self.IssuerFASTag" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MapperVehicleClass" EntityType="Self.MapperVehicleClass" Schema="dbo" store:Type="Tables" />
@@ -1575,8 +1651,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySet Name="RFID_Tracker" EntityType="Self.RFID_Tracker" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RouteTollsQuery" EntityType="Self.RouteTollsQuery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RTO" EntityType="Self.RTO" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tagActivateSuspendClose" EntityType="Self.tagActivateSuspendClose" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TagReplacementReq" EntityType="Self.TagReplacementReq" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TollPayWallet" EntityType="Self.TollPayWallet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TollPlaza" EntityType="Self.TollPlaza" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TollPlazaEmployee" EntityType="Self.TollPlazaEmployee" Schema="dbo" store:Type="Tables" />
@@ -1641,8 +1717,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
     FROM [dbo].[HistoryTollPlazza] AS [HistoryTollPlazza]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DP_TPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -2121,6 +2196,9 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="ecom_CustomerVehicleType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="ecom_CustomerIdentity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ecom_CreatedDate" Type="DateTime" Precision="7" />
+          <Property Name="TagAcctID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TagClosure_Date" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="IndusBank_APILogs">
           <Key>
@@ -2176,6 +2254,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="KycProofImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DistributorID" Type="Int32" />
           <Property Name="isOTPVerified" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BankStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IndusInd_Regions">
           <Key>
@@ -2200,6 +2279,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="DistributorId" Type="Int32" />
           <Property Name="OrderDateTime" Type="DateTime" Precision="3" />
           <Property Name="OrderStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BankStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="IndusInd_TagStockDetails">
           <Key>
@@ -2254,11 +2334,11 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Thread" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Logger" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="7" />
+          <Property Name="Thread" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Logger" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MapperVehicleClass">
@@ -2354,16 +2434,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="C_Place_" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="C_State_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <EntityType Name="tagActivateSuspendClose">
           <Key>
             <PropertyRef Name="tagId" />
@@ -2371,6 +2441,24 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="tagId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="operationId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="walletId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TagReplacementReq">
+          <Key>
+            <PropertyRef Name="SrNo" />
+          </Key>
+          <Property Name="SrNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReqDate" Type="DateTime" Precision="3" />
+          <Property Name="ApprovDate" Type="DateTime" Precision="3" />
+          <Property Name="OldSrNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NewSrNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalesPersonID" Type="Int32" />
+          <Property Name="VehicleClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DistID" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OTP" Type="Int32" />
+          <Property Name="CustMobNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BankStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TollPayWallet">
           <Key>
@@ -2603,6 +2691,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Name="CreatedDate" Type="DateTime" Precision="7" />
           <Property Name="RC_FrontImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RC_BackImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="6" />
         </EntityType>
         <EntityType Name="UserBankDetail">
           <Key>
@@ -2766,8 +2856,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySet Name="RFID_Tracker" EntityType="Self.RFID_Tracker" />
           <EntitySet Name="RouteTollsQueries" EntityType="Self.RouteTollsQuery" />
           <EntitySet Name="RTOes" EntityType="Self.RTO" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="tagActivateSuspendCloses" EntityType="Self.tagActivateSuspendClose" />
+          <EntitySet Name="TagReplacementReqs" EntityType="Self.TagReplacementReq" />
           <EntitySet Name="TollPayWallets" EntityType="Self.TollPayWallet" />
           <EntitySet Name="TollPlazas" EntityType="Self.TollPlaza" />
           <EntitySet Name="TollPlazaEmployees" EntityType="Self.TollPlazaEmployee" />
@@ -2788,12 +2878,12 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySet Name="UserTollTrackers" EntityType="Self.UserTollTracker" />
           <EntitySet Name="HistoryTollPlazzas" EntityType="Self.HistoryTollPlazza" />
           <FunctionImport Name="AccountingofTagStackByDistributor" ReturnType="Collection(DP_TPModel.AccountingofTagStackByDistributor_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPDistributorStockAllDistributer" ReturnType="Collection(DP_TPModel.ASPDistributorStockAllDistributer_Result)" />
           <FunctionImport Name="ASPDistributorStockAllDistributorTags" ReturnType="Collection(DP_TPModel.ASPDistributorStockAllDistributorTags_Result)" />
           <FunctionImport Name="ASPDistributorStockBylSingleDistributorTags" ReturnType="Collection(DP_TPModel.ASPDistributorStockBylSingleDistributorTags_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPDistributorWiseTeamCountandTagCount" ReturnType="Collection(DP_TPModel.ASPDistributorWiseTeamCountandTagCount_Result)">
             <Parameter Name="startd" Mode="In" Type="DateTime" />
@@ -2825,15 +2915,15 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <FunctionImport Name="ASPInwardYearlyReport" ReturnType="Collection(DP_TPModel.ASPInwardYearlyReport_Result)" />
           <FunctionImport Name="ASPOutwardAllDistributerNameByTagCount" ReturnType="Collection(DP_TPModel.ASPOutwardAllDistributerNameByTagCount_Result)" />
           <FunctionImport Name="ASPOutwardDailyreport" ReturnType="Collection(DP_TPModel.ASPOutwardDailyreport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardDailyReportAll" ReturnType="Collection(DP_TPModel.ASPOutwardDailyReportAll_Result)" />
           <FunctionImport Name="ASPOutwardMonthReport" ReturnType="Collection(DP_TPModel.ASPOutwardMonthReport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardMonthReportAll" ReturnType="Collection(DP_TPModel.ASPOutwardMonthReportAll_Result)" />
           <FunctionImport Name="ASPOutwardQuarterlyReport" ReturnType="Collection(DP_TPModel.ASPOutwardQuarterlyReport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardQuarterlyReportAll" ReturnType="Collection(DP_TPModel.ASPOutwardQuarterlyReportAll_Result)" />
           <FunctionImport Name="ASPOutwardReportAllQuantity" ReturnType="Collection(DP_TPModel.ASPOutwardReportAllQuantity_Result)" />
@@ -2855,7 +2945,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="end_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardReportBySingleDistributorQuantity" ReturnType="Collection(DP_TPModel.ASPOutwardReportBySingleDistributorQuantity_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardReportBySingleDistributorQuantityByDate" ReturnType="Collection(DP_TPModel.ASPOutwardReportBySingleDistributorQuantityByDate_Result)">
             <Parameter Name="vdist" Mode="In" Type="String" />
@@ -2877,23 +2967,23 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="end_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardWeeklyReport" ReturnType="Collection(DP_TPModel.ASPOutwardWeeklyReport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardWeeklyReportAll" ReturnType="Collection(DP_TPModel.ASPOutwardWeeklyReportAll_Result)" />
           <FunctionImport Name="ASPOutwardYearlyReport" ReturnType="Collection(DP_TPModel.ASPOutwardYearlyReport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPOutwardYearlyReportAll" ReturnType="Collection(DP_TPModel.ASPOutwardYearlyReportAll_Result)" />
           <FunctionImport Name="ASPSaleDailyreport" ReturnType="Collection(DP_TPModel.ASPSaleDailyreport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleDailyReportAll" ReturnType="Collection(DP_TPModel.ASPSaleDailyReportAll_Result)" />
           <FunctionImport Name="ASPSaleMonthlyreport" ReturnType="Collection(DP_TPModel.ASPSaleMonthlyreport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleMonthlyReportAll" ReturnType="Collection(DP_TPModel.ASPSaleMonthlyReportAll_Result)" />
           <FunctionImport Name="ASPSaleQuarterlyeport" ReturnType="Collection(DP_TPModel.ASPSaleQuarterlyeport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleQuarterlyReportAll" ReturnType="Collection(DP_TPModel.ASPSaleQuarterlyReportAll_Result)" />
           <FunctionImport Name="ASPSaleReportAllQuantity" ReturnType="Collection(DP_TPModel.ASPSaleReportAllQuantity_Result)" />
@@ -2915,7 +3005,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="end_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleReportByDistributer" ReturnType="Collection(DP_TPModel.ASPSaleReportByDistributer_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleReportByDistributorTagdetail" ReturnType="Collection(DP_TPModel.ASPSaleReportByDistributorTagdetail_Result)">
             <Parameter Name="vdist" Mode="In" Type="String" />
@@ -2941,27 +3031,27 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="end_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleReportSingleDistributorAllQuantity" ReturnType="Collection(DP_TPModel.ASPSaleReportSingleDistributorAllQuantity_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSalesWiseTeamCountandTagCount" ReturnType="Collection(DP_TPModel.ASPSalesWiseTeamCountandTagCount_Result)">
             <Parameter Name="startd" Mode="In" Type="DateTime" />
             <Parameter Name="endd" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleWeeklyreport" ReturnType="Collection(DP_TPModel.ASPSaleWeeklyreport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleWeeklyReportAll" ReturnType="Collection(DP_TPModel.ASPSaleWeeklyReportAll_Result)" />
           <FunctionImport Name="ASPSaleYearlyReport" ReturnType="Collection(DP_TPModel.ASPSaleYearlyReport_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPSaleYearlyReportAll" ReturnType="Collection(DP_TPModel.ASPSaleYearlyReportAll_Result)" />
           <FunctionImport Name="ASPSingleDistributorStock" ReturnType="Collection(DP_TPModel.ASPSingleDistributorStock_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ASPTollpayStock" ReturnType="Collection(DP_TPModel.ASPTollpayStock_Result)" />
           <FunctionImport Name="ASPTollpayStockTags" ReturnType="Collection(DP_TPModel.ASPTollpayStockTags_Result)" />
           <FunctionImport Name="ASPTransactionReportByCustomer" ReturnType="Collection(DP_TPModel.ASPTransactionReportByCustomer_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ChartOnLineUserCount" ReturnType="Collection(DP_TPModel.ChartOnLineUserCount_Result)" />
           <FunctionImport Name="ChartRollWiseEmployeeCounts" ReturnType="Collection(DP_TPModel.ChartRollWiseEmployeeCounts_Result)" />
@@ -2971,10 +3061,10 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ChartSingleTollWiseTodayCollection" ReturnType="Collection(DP_TPModel.ChartSingleTollWiseTodayCollection_Result)">
-            <Parameter Name="TollNo" Mode="In" Type="Int32" />
+          <Parameter Name="TollNo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ChartSingleTollWiseTodayVehicleDetails" ReturnType="Collection(DP_TPModel.ChartSingleTollWiseTodayVehicleDetails_Result)">
-            <Parameter Name="TollNo" Mode="In" Type="Int32" />
+          <Parameter Name="TollNo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ChartTollNoAndDateWiseTotalCollection" ReturnType="Collection(DP_TPModel.ChartTollNoAndDateWiseTotalCollection_Result)">
             <Parameter Name="startdate" Mode="In" Type="DateTime" />
@@ -3015,7 +3105,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="DriverOwnerMobNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="dbLogger">
-            <Parameter Name="vMessage" Mode="In" Type="String" />
+          <Parameter Name="vMessage" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Debug_CreateTrip" />
           <FunctionImport Name="deductPaymentforTollPlazzaFromWallet">
@@ -3046,22 +3136,35 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <Parameter Name="enddate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="DistributorAndTeamUnSoldsTags" ReturnType="Collection(DP_TPModel.DistributorAndTeamUnSoldsTags_Result)">
-            <Parameter Name="vdistid" Mode="In" Type="String" />
+          <Parameter Name="vdistid" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="DistributorTagRequest" ReturnType="Collection(DP_TPModel.DistributorTagRequest_Result)" />
           <FunctionImport Name="dontClickClearTrips" />
           <FunctionImport Name="FastagRechargeTransaction" ReturnType="Collection(DP_TPModel.FastagRechargeTransaction_Result)">
             <Parameter Name="start_date" Mode="In" Type="DateTime" />
             <Parameter Name="end_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="FastagRechargeTransactionByCustomer" ReturnType="Collection(DP_TPModel.FastagRechargeTransactionByCustomer_Result)">
-            <Parameter Name="CustUsername" Mode="In" Type="String" />
+          <Parameter Name="CustUsername" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FASTagRechargeTransactionByDist_ID" ReturnType="Collection(DP_TPModel.FASTagRechargeTransactionByDist_ID_Result)">
+          <Parameter Name="Dist_ID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="FASTagRechargeTransactionByDist_ID_Date" ReturnType="Collection(DP_TPModel.FASTagRechargeTransactionByDist_ID_Date_Result)">
+            <Parameter Name="Dist_ID" Mode="In" Type="String" />
+            <Parameter Name="Start_date" Mode="In" Type="DateTime" />
+            <Parameter Name="End_date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="FastagTransaction" ReturnType="Collection(DP_TPModel.FastagTransaction_Result)" />
+          <FunctionImport Name="FastagTransactionByDate" ReturnType="Collection(DP_TPModel.FastagTransactionByDate_Result)">
+            <Parameter Name="start_date" Mode="In" Type="DateTime" />
+            <Parameter Name="end_date" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <FunctionImport Name="GetDailyTickets" ReturnType="Collection(DP_TPModel.GetDailyTickets_Result)">
-            <Parameter Name="TollPlazaID" Mode="In" Type="Int32" />
+          <Parameter Name="TollPlazaID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetDistributorAndTeamUnSoldTag" ReturnType="Collection(DP_TPModel.GetDistributorAndTeamUnSoldTag_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetDistributorFullNameList" ReturnType="Collection(DP_TPModel.GetDistributorFullNameList_Result)" />
           <FunctionImport Name="GetDistributorTags" ReturnType="Collection(DP_TPModel.GetDistributorTags_Result)">
@@ -3076,16 +3179,16 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           </FunctionImport>
           <FunctionImport Name="GetRoutes" ReturnType="Collection(String)" />
           <FunctionImport Name="GetSalesTeambyDistributorId" ReturnType="Collection(DP_TPModel.GetSalesTeambyDistributorId_Result)">
-            <Parameter Name="vdistid" Mode="In" Type="String" />
+          <Parameter Name="vdistid" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetTollPlazzDetailsByTripId" ReturnType="Collection(DP_TPModel.GetTollPlazzDetailsByTripId_Result)">
-            <Parameter Name="tripid" Mode="In" Type="Int32" />
+          <Parameter Name="tripid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetTollPriceByTollName" ReturnType="Collection(DP_TPModel.GetTollPriceByTollName_Result)">
-            <Parameter Name="vtollplazaname" Mode="In" Type="String" />
+          <Parameter Name="vtollplazaname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getTripPrices" ReturnType="Collection(DP_TPModel.getTripPrices_Result)">
-            <Parameter Name="strinput" Mode="In" Type="String" />
+          <Parameter Name="strinput" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetVehicleTypeOfAvailableStockTags" ReturnType="Collection(DP_TPModel.GetVehicleTypeOfAvailableStockTags_Result)" />
           <FunctionImport Name="InsertIntoUserTollTracker">
@@ -3116,62 +3219,66 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <FunctionImport Name="ReportTodayTripAmountByCollectionMode" ReturnType="Collection(DP_TPModel.ReportTodayTripAmountByCollectionMode_Result)" />
           <FunctionImport Name="salesreport" ReturnType="Collection(DP_TPModel.salesreport_Result)" />
           <FunctionImport Name="salesreportbyDistributorId" ReturnType="Collection(DP_TPModel.salesreportbyDistributorId_Result)">
-            <Parameter Name="vdistid" Mode="In" Type="String" />
+          <Parameter Name="vdistid" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SolDCount" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
           <FunctionImport Name="sp_BackupDatabases">
             <Parameter Name="databaseName" Mode="In" Type="String" />
             <Parameter Name="backupType" Mode="In" Type="String" />
             <Parameter Name="backupLocation" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(DP_TPModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(DP_TPModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="SP_Map_NCPI_TollPlaza" ReturnType="Collection(DP_TPModel.SP_Map_NCPI_TollPlaza_Result)" />
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="TagReplacementReport" ReturnType="Collection(DP_TPModel.TagReplacementReport_Result)" />
           <FunctionImport Name="TagStackByDistributor" ReturnType="Collection(DP_TPModel.TagStackByDistributor_Result)">
-            <Parameter Name="vdist" Mode="In" Type="String" />
+          <Parameter Name="vdist" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TodayVehicleByType" ReturnType="Collection(DP_TPModel.TodayVehicleByType_Result)" />
+          <FunctionImport Name="TollpayStockCost" ReturnType="Collection(DP_TPModel.TollpayStockCost_Result)" />
           <FunctionImport Name="TollPayTagStack" ReturnType="Collection(DP_TPModel.TollPayTagStack_Result)" />
           <FunctionImport Name="TollRateFileCSV" ReturnType="Collection(DP_TPModel.TollRateFileCSV_Result)" />
           <FunctionImport Name="TP_GenerateFastTags" />
           <FunctionImport Name="TP_GenerateUserData" />
           <FunctionImport Name="UpdateGeoFenceforTesting" />
           <FunctionImport Name="updateTollTripAmt">
-            <Parameter Name="vTripId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="UsersBy_OwnerID" ReturnType="Collection(DP_TPModel.UsersBy_OwnerID_Result)">
-            <Parameter Name="ownerID" Mode="In" Type="Int32" />
+          <Parameter Name="vTripId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UserTripStatus" ReturnType="Collection(DP_TPModel.UserTripStatus_Result)">
-            <Parameter Name="userno" Mode="In" Type="Int32" />
+          <Parameter Name="userno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="VTP_GetNearestVehicles" ReturnType="Collection(DP_TPModel.VTP_GetNearestVehicles_Result)">
+            <Parameter Name="startlat" Mode="In" Type="Double" />
+            <Parameter Name="startlng" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="VTP_UsersBy_OwnerID" ReturnType="Collection(DP_TPModel.VTP_UsersBy_OwnerID_Result)">
+          <Parameter Name="ownerID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="IndusInd_walletRecharge" EntityType="DP_TPModel.IndusInd_walletRecharge" />
+          <FunctionImport Name="TagClosureReport" ReturnType="Collection(DP_TPModel.TagClosureReport_Result)" />
+          <FunctionImport Name="VTP_GetVehicleClassDetailsByDistID" ReturnType="Collection(DP_TPModel.VTP_GetVehicleClassDetailsByDistID_Result)">
+          <Parameter Name="distID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="VTP_GetVehicleTypeByDistID" ReturnType="Collection(String)">
+          <Parameter Name="distID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="VTP_TPUpdateWalletInfo" ReturnType="Collection(String)" />
+          <FunctionImport Name="ASTP" ReturnType="Collection(DP_TPModel.ASTP_Result)">
+          <Parameter Name="vdistidint" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DistributorUnSoldStock" ReturnType="Collection(DP_TPModel.DistributorUnSoldStock_Result)">
+          <Parameter Name="DistID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TagClosureReportByDate" ReturnType="Collection(DP_TPModel.TagClosureReportByDate_Result)">
+            <Parameter Name="start_date" Mode="In" Type="DateTime" />
+            <Parameter Name="end_date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="TagReplacementReportByDate" ReturnType="Collection(DP_TPModel.TagReplacementReportByDate_Result)">
+            <Parameter Name="start_date" Mode="In" Type="DateTime" />
+            <Parameter Name="end_date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="DistributStatistics" ReturnType="Collection(DP_TPModel.DistributStatistics_Result)">
+            <Parameter Name="vdistid" Mode="In" Type="String" />
+            <Parameter Name="startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="enddate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="AccountingofTagStackByDistributor_Result">
@@ -3258,8 +3365,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         </ComplexType>
         <ComplexType Name="ASPInwardReportDayWiseQuantity_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="Tag_Count" Nullable="true" />
-          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+          <Property Type="String" Name="ImportDate" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="ASPInwardWeeklyReport_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
@@ -3276,22 +3383,22 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="Int32" Name="TotalTagCount" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ASPOutwardDailyreport_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardDailyReportAll_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardMonthReport_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardMonthReportAll_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
@@ -3306,82 +3413,82 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="Int32" Name="TagCount" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportAllQuantity_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportAllQuantityByDate_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
           <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportAllTagsByDate_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TagSrNo" Nullable="true" MaxLength="24" />
-          <Property Type="String" Name="Serial_Number" Nullable="true" MaxLength="18" />
-          <Property Type="String" Name="Batch_Number" Nullable="true" MaxLength="18" />
-          <Property Type="String" Name="Lot_Number" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="TagSrNo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Serial_Number" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Batch_Number" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Lot_Number" Nullable="false" />
           <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportByDate_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportBySingleDistributorAllQuantity_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportBySingleDistributorQuantity_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportBySingleDistributorQuantityByDate_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
           <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportBySingleDistributorTagsByDate_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="TagSrNo" Nullable="true" MaxLength="24" />
-          <Property Type="String" Name="Serial_Number" Nullable="true" MaxLength="18" />
-          <Property Type="String" Name="Batch_Number" Nullable="true" MaxLength="18" />
-          <Property Type="String" Name="Lot_Number" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="TagSrNo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Serial_Number" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Batch_Number" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Lot_Number" Nullable="false" />
           <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportDayWiseQuantityAll_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Tag_Count" Nullable="true" />
-          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+          <Property Type="String" Name="ImportDate" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="ASPOutwardReportDayWiseQuantityByDistributor_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Tag_Count" Nullable="true" />
-          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+          <Property Type="String" Name="ImportDate" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="ASPOutwardWeeklyReport_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardWeeklyReportAll_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardYearlyReport_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ASPOutwardYearlyReportAll_Result">
-          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="TagCount" Nullable="true" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
@@ -3483,13 +3590,13 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         </ComplexType>
         <ComplexType Name="ASPSaleReportDayWiseQuantity_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Tag_Count" Nullable="true" />
-          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+          <Property Type="String" Name="ImportDate" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="ASPSaleReportDayWiseQuantityByDistributor_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Tag_Count" Nullable="true" />
-          <Property Type="String" Name="Date" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+          <Property Type="String" Name="ImportDate" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="ASPSaleReportSingleDistributorAllQuantity_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
@@ -3629,6 +3736,15 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="String" Name="ecom_CustomerMobNo" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="ecom_CustomerVehicleNo" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <ComplexType Name="DistributorTagRequest_Result">
+          <Property Type="Int32" Name="SrNo" Nullable="false" />
+          <Property Type="Int32" Name="DistId" Nullable="true" />
+          <Property Type="String" Name="TagTypeID" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Qty" Nullable="true" />
+          <Property Type="DateTime" Name="RequestDate" Nullable="true" />
+          <Property Type="String" Name="ApprovalStatus" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ApprovedBy" Nullable="true" MaxLength="10" />
+        </ComplexType>
         <ComplexType Name="FastagRechargeTransaction_Result">
           <Property Type="String" Name="firstname" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
@@ -3645,13 +3761,35 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="String" Name="Transaction_Date" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="addedon" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="FASTagRechargeTransactionByDist_ID_Result">
+          <Property Type="String" Name="firstname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="phone1" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Credit" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Payment_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Transaction_Date" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="FASTagRechargeTransactionByDist_ID_Date_Result">
+          <Property Type="String" Name="firstname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="phone1" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Credit" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Payment_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Transaction_Date" Nullable="true" MaxLength="30" />
+        </ComplexType>
         <ComplexType Name="FastagTransaction_Result">
           <Property Type="String" Name="firstname" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
           <Property Type="Decimal" Name="Credit" Nullable="true" Precision="19" />
           <Property Type="String" Name="Payment_Type" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Transaction_Date" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="addedon" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="FastagTransactionByDate_Result">
+          <Property Type="String" Name="firstname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="phone" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Credit" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Payment_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Transaction_Date" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="GetDailyTickets_Result">
           <Property Type="Int32" Name="srno" Nullable="false" />
@@ -3832,20 +3970,18 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="String" Name="CustomerMobNo" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="CustomerVehicleNo" Nullable="true" MaxLength="10" />
         </ComplexType>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
         <ComplexType Name="SP_Map_NCPI_TollPlaza_Result">
           <Property Type="String" Name="name" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="Plaza_Name" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="TagReplacementReport_Result">
+          <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="CustMobNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="OldSrNo" Nullable="true" MaxLength="18" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ReqDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ApprovDate" Nullable="true" Precision="23" />
         </ComplexType>
         <ComplexType Name="TagStackByDistributor_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
@@ -3856,6 +3992,11 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
         <ComplexType Name="TodayVehicleByType_Result">
           <Property Type="Int32" Name="VehicleCount" Nullable="true" />
           <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="TollpayStockCost_Result">
+          <Property Type="String" Name="Vehicle_Type" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="AvailableTags" Nullable="true" />
+          <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="TollPayTagStack_Result">
           <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
@@ -3892,14 +4033,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="Double" Name="rates_seven_plus_axle_multi" Nullable="true" />
           <Property Type="Double" Name="rates_seven_plus_axle_monthly" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="UsersBy_OwnerID_Result">
-          <Property Type="Int32" Name="srno" Nullable="false" />
-          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="username" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="uservehicleRegNo" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <ComplexType Name="UserTripStatus_Result">
           <Property Type="Int32" Name="tripId" Nullable="true" />
           <Property Type="String" Name="VehicleRegNo" Nullable="true" MaxLength="50" />
@@ -3909,6 +4042,95 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <Property Type="String" Name="TripPaymentReciptNo" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="TripPaymentTransationId" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="TripPaymentGateway" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="VTP_GetNearestVehicles_Result">
+          <Property Type="Int32" Name="userid" Nullable="true" />
+          <Property Type="String" Name="DriverName" Nullable="true" MaxLength="250" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="6" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="6" />
+          <Property Type="String" Name="OwnerName" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="uservehicleRegNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="RC_FrontImage" Nullable="true" />
+          <Property Type="String" Name="RC_BackImage" Nullable="true" />
+          <Property Type="Double" Name="KMDistance" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="VTP_UsersBy_OwnerID_Result">
+          <Property Type="Int32" Name="srno" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="uservehicleRegNo" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="6" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="6" />
+        </ComplexType>
+        <EntityType Name="IndusInd_walletRecharge">
+          <Key>
+            <PropertyRef Name="SrNo" />
+          </Key>
+          <Property Name="SrNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Transac_IPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentType" Type="Int32" Nullable="false" />
+          <Property Name="TagAccountNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="RechargePercentage" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="TotalAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="BankStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="TagClosureReport_Result">
+          <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="TagSrNo" Nullable="true" MaxLength="24" />
+          <Property Type="String" Name="Serial_Number" Nullable="true" MaxLength="18" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerMobNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerVehicleNo" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="TagClosure_Date" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="VTP_GetVehicleClassDetailsByDistID_Result">
+          <Property Type="Int32" Name="VehicleID" Nullable="false" />
+          <Property Type="Int32" Name="VehicleClassId" Nullable="false" />
+          <Property Type="String" Name="VehicleType" Nullable="false" MaxLength="500" />
+          <Property Type="Decimal" Name="Amount" Nullable="false" Precision="8" Scale="4" />
+          <Property Type="Decimal" Name="SecurityDeposit" Nullable="false" Precision="8" Scale="4" />
+          <Property Type="Decimal" Name="CardCost" Nullable="false" Precision="8" Scale="4" />
+        </ComplexType>
+        <ComplexType Name="ASTP_Result">
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="TagUnsoldCost" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TagsoldCost" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="DistributorUnSoldStock_Result">
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TagCount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="TagClosureReportByDate_Result">
+          <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="CustomerMobNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerVehicleNo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Vehicle_Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TagSrNo" Nullable="true" MaxLength="24" />
+          <Property Type="String" Name="Serial_Number" Nullable="true" MaxLength="18" />
+          <Property Type="DateTime" Name="TagClosure_Date" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="TagReplacementReportByDate_Result">
+          <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CustMobNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="VehicleClass" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="OldSrNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NewSrNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VehicleNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Replace_date" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="DistributStatistics_Result">
+          <Property Type="Int32" Name="TagSoldCount" Nullable="true" />
+          <Property Type="Int32" Name="TagUnSoldCount" Nullable="true" />
+          <Property Type="Int32" Name="DistTeamSalesPersonCount" Nullable="true" />
+          <Property Type="Int32" Name="DistTeamCustomerCount" Nullable="true" />
+          <Property Type="Decimal" Name="DistAmountBalance" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4401,6 +4623,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySetMapping Name="ecom_RFID">
             <EntityTypeMapping TypeName="DP_TPModel.ecom_RFID">
               <MappingFragment StoreEntitySet="ecom_RFID">
+                <ScalarProperty Name="TagClosure_Date" ColumnName="TagClosure_Date" />
+                <ScalarProperty Name="BankStatus" ColumnName="BankStatus" />
                 <ScalarProperty Name="ecom_srno" ColumnName="ecom.srno" />
                 <ScalarProperty Name="ecom_RFIDTagSrNo" ColumnName="ecom.RFIDTagSrNo" />
                 <ScalarProperty Name="Serial_Number" ColumnName="Serial_Number" />
@@ -4420,6 +4644,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
                 <ScalarProperty Name="ecom_CustomerVehicleType" ColumnName="ecom.CustomerVehicleType" />
                 <ScalarProperty Name="ecom_CustomerIdentity" ColumnName="ecom.CustomerIdentity" />
                 <ScalarProperty Name="ecom_CreatedDate" ColumnName="ecom.CreatedDate" />
+                <ScalarProperty Name="TagAcctID" ColumnName="TagAcctID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4450,6 +4675,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySetMapping Name="IndusInd_CustomerRegistration">
             <EntityTypeMapping TypeName="DP_TPModel.IndusInd_CustomerRegistration">
               <MappingFragment StoreEntitySet="IndusInd_CustomerRegistration">
+                <ScalarProperty Name="BankStatus" ColumnName="BankStatus" />
                 <ScalarProperty Name="srno" ColumnName="srno" />
                 <ScalarProperty Name="TollPayCustId" ColumnName="TollPayCustId" />
                 <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
@@ -4492,6 +4718,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <EntitySetMapping Name="IndusInd_TagRegistration">
             <EntityTypeMapping TypeName="DP_TPModel.IndusInd_TagRegistration">
               <MappingFragment StoreEntitySet="IndusInd_TagRegistration">
+                <ScalarProperty Name="BankStatus" ColumnName="BankStatus" />
                 <ScalarProperty Name="srno" ColumnName="srno" />
                 <ScalarProperty Name="CustomerMobileNo" ColumnName="CustomerMobileNo" />
                 <ScalarProperty Name="CustomerOrderNo" ColumnName="CustomerOrderNo" />
@@ -4671,23 +4898,31 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="DP_TPModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tagActivateSuspendCloses">
             <EntityTypeMapping TypeName="DP_TPModel.tagActivateSuspendClose">
               <MappingFragment StoreEntitySet="tagActivateSuspendClose">
                 <ScalarProperty Name="tagId" ColumnName="tagId" />
                 <ScalarProperty Name="operationId" ColumnName="operationId" />
                 <ScalarProperty Name="walletId" ColumnName="walletId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TagReplacementReqs">
+            <EntityTypeMapping TypeName="DP_TPModel.TagReplacementReq">
+              <MappingFragment StoreEntitySet="TagReplacementReq">
+                <ScalarProperty Name="BankStatus" ColumnName="BankStatus" />
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="ApprovDate" ColumnName="ApprovDate" />
+                <ScalarProperty Name="OldSrNo" ColumnName="OldSrNo" />
+                <ScalarProperty Name="NewSrNo" ColumnName="NewSrNo" />
+                <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
+                <ScalarProperty Name="SalesPersonID" ColumnName="SalesPersonID" />
+                <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+                <ScalarProperty Name="DistID" ColumnName="DistID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="CustMobNo" ColumnName="CustMobNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4934,6 +5169,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="RC_FrontImage" ColumnName="RC_FrontImage" />
                 <ScalarProperty Name="RC_BackImage" ColumnName="RC_BackImage" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5197,8 +5434,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ASPInwardReportDayWiseQuantity_Result">
                 <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
-                <ScalarProperty Name="Tag_Count" ColumnName="Tag_Count" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5368,8 +5605,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ASPOutwardReportDayWiseQuantityAll_Result">
                 <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
-                <ScalarProperty Name="Tag_Count" ColumnName="Tag_Count" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5377,8 +5614,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ASPOutwardReportDayWiseQuantityByDistributor_Result">
                 <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
-                <ScalarProperty Name="Tag_Count" ColumnName="Tag_Count" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5578,8 +5815,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ASPSaleReportDayWiseQuantity_Result">
                 <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
-                <ScalarProperty Name="Tag_Count" ColumnName="Tag_Count" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5587,8 +5824,8 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.ASPSaleReportDayWiseQuantityByDistributor_Result">
                 <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
-                <ScalarProperty Name="Tag_Count" ColumnName="Tag_Count" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5829,6 +6066,19 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DistributorTagRequest" FunctionName="DP_TPModel.Store.DistributorTagRequest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.DistributorTagRequest_Result">
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="DistId" ColumnName="DistId" />
+                <ScalarProperty Name="TagTypeID" ColumnName="TagTypeID" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="dontClickClearTrips" FunctionName="DP_TPModel.Store.dontClickClearTrips" />
           <FunctionImportMapping FunctionImportName="FastagRechargeTransaction" FunctionName="DP_TPModel.Store.FastagRechargeTransaction">
             <ResultMapping>
@@ -5854,6 +6104,30 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FASTagRechargeTransactionByDist_ID" FunctionName="DP_TPModel.Store.FASTagRechargeTransactionByDist_ID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.FASTagRechargeTransactionByDist_ID_Result">
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="phone1" ColumnName="phone1" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Payment_Type" ColumnName="Payment_Type" />
+                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FASTagRechargeTransactionByDist_ID_Date" FunctionName="DP_TPModel.Store.FASTagRechargeTransactionByDist_ID_Date">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.FASTagRechargeTransactionByDist_ID_Date_Result">
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="phone1" ColumnName="phone1" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Payment_Type" ColumnName="Payment_Type" />
+                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="FastagTransaction" FunctionName="DP_TPModel.Store.FastagTransaction">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.FastagTransaction_Result">
@@ -5862,7 +6136,17 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
                 <ScalarProperty Name="Credit" ColumnName="Credit" />
                 <ScalarProperty Name="Payment_Type" ColumnName="Payment_Type" />
                 <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
-                <ScalarProperty Name="addedon" ColumnName="addedon" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="FastagTransactionByDate" FunctionName="DP_TPModel.Store.FastagTransactionByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.FastagTransactionByDate_Result">
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Payment_Type" ColumnName="Payment_Type" />
+                <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -6114,29 +6398,7 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SolDCount" FunctionName="DP_TPModel.Store.SolDCount" />
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="DP_TPModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_BackupDatabases" FunctionName="DP_TPModel.Store.sp_BackupDatabases" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="DP_TPModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="DP_TPModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="DP_TPModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DP_TPModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="DP_TPModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DP_TPModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_Map_NCPI_TollPlaza" FunctionName="DP_TPModel.Store.SP_Map_NCPI_TollPlaza">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.SP_Map_NCPI_TollPlaza_Result">
@@ -6145,8 +6407,19 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DP_TPModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DP_TPModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="TagReplacementReport" FunctionName="DP_TPModel.Store.TagReplacementReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.TagReplacementReport_Result">
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="CustMobNo" ColumnName="CustMobNo" />
+                <ScalarProperty Name="OldSrNo" ColumnName="OldSrNo" />
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="ApprovDate" ColumnName="ApprovDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="TagStackByDistributor" FunctionName="DP_TPModel.Store.TagStackByDistributor">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.TagStackByDistributor_Result">
@@ -6162,6 +6435,15 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
               <ComplexTypeMapping TypeName="DP_TPModel.TodayVehicleByType_Result">
                 <ScalarProperty Name="VehicleCount" ColumnName="VehicleCount" />
                 <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TollpayStockCost" FunctionName="DP_TPModel.Store.TollpayStockCost">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.TollpayStockCost_Result">
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="AvailableTags" ColumnName="AvailableTags" />
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -6212,18 +6494,6 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
           <FunctionImportMapping FunctionImportName="TP_GenerateUserData" FunctionName="DP_TPModel.Store.TP_GenerateUserData" />
           <FunctionImportMapping FunctionImportName="UpdateGeoFenceforTesting" FunctionName="DP_TPModel.Store.UpdateGeoFenceforTesting" />
           <FunctionImportMapping FunctionImportName="updateTollTripAmt" FunctionName="DP_TPModel.Store.updateTollTripAmt" />
-          <FunctionImportMapping FunctionImportName="UsersBy_OwnerID" FunctionName="DP_TPModel.Store.UsersBy_OwnerID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DP_TPModel.UsersBy_OwnerID_Result">
-                <ScalarProperty Name="srno" ColumnName="srno" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
-                <ScalarProperty Name="uservehicleRegNo" ColumnName="uservehicleRegNo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="UserTripStatus" FunctionName="DP_TPModel.Store.UserTripStatus">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DP_TPModel.UserTripStatus_Result">
@@ -6235,6 +6505,124 @@ warning 6013: The table/view 'DP_TP.dbo.NCPI' does not have a primary key define
                 <ScalarProperty Name="TripPaymentReciptNo" ColumnName="TripPaymentReciptNo" />
                 <ScalarProperty Name="TripPaymentTransationId" ColumnName="TripPaymentTransationId" />
                 <ScalarProperty Name="TripPaymentGateway" ColumnName="TripPaymentGateway" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VTP_GetNearestVehicles" FunctionName="DP_TPModel.Store.VTP_GetNearestVehicles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.VTP_GetNearestVehicles_Result">
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="uservehicleRegNo" ColumnName="uservehicleRegNo" />
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="RC_FrontImage" ColumnName="RC_FrontImage" />
+                <ScalarProperty Name="RC_BackImage" ColumnName="RC_BackImage" />
+                <ScalarProperty Name="KMDistance" ColumnName="KMDistance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VTP_UsersBy_OwnerID" FunctionName="DP_TPModel.Store.VTP_UsersBy_OwnerID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.VTP_UsersBy_OwnerID_Result">
+                <ScalarProperty Name="srno" ColumnName="srno" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="uservehicleRegNo" ColumnName="uservehicleRegNo" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="IndusInd_walletRecharge">
+            <EntityTypeMapping TypeName="DP_TPModel.IndusInd_walletRecharge">
+              <MappingFragment StoreEntitySet="IndusInd_walletRecharge">
+                <ScalarProperty Name="BankStatus" ColumnName="BankStatus" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="RechargePercentage" ColumnName="RechargePercentage" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="TagAccountNo" ColumnName="TagAccountNo" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+                <ScalarProperty Name="Transac_IPAddress" ColumnName="Transac_IPAddress" />
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TagClosureReport" FunctionName="DP_TPModel.Store.TagClosureReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.TagClosureReport_Result">
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="TagSrNo" ColumnName="TagSrNo" />
+                <ScalarProperty Name="Serial_Number" ColumnName="Serial_Number" />
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="CustomerMobNo" ColumnName="CustomerMobNo" />
+                <ScalarProperty Name="CustomerVehicleNo" ColumnName="CustomerVehicleNo" />
+                <ScalarProperty Name="TagClosure_Date" ColumnName="TagClosure_Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VTP_GetVehicleClassDetailsByDistID" FunctionName="DP_TPModel.Store.VTP_GetVehicleClassDetailsByDistID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.VTP_GetVehicleClassDetailsByDistID_Result">
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="VehicleClassId" ColumnName="VehicleClassId" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SecurityDeposit" ColumnName="SecurityDeposit" />
+                <ScalarProperty Name="CardCost" ColumnName="CardCost" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VTP_TPUpdateWalletInfo" FunctionName="DP_TPModel.Store.VTP_TPUpdateWalletInfo" />
+          <FunctionImportMapping FunctionImportName="DistributorUnSoldStock" FunctionName="DP_TPModel.Store.DistributorUnSoldStock">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.DistributorUnSoldStock_Result">
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="TagCount" ColumnName="TagCount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TagClosureReportByDate" FunctionName="DP_TPModel.Store.TagClosureReportByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.TagClosureReportByDate_Result">
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="CustomerMobNo" ColumnName="CustomerMobNo" />
+                <ScalarProperty Name="CustomerVehicleNo" ColumnName="CustomerVehicleNo" />
+                <ScalarProperty Name="Vehicle_Type" ColumnName="Vehicle_Type" />
+                <ScalarProperty Name="TagSrNo" ColumnName="TagSrNo" />
+                <ScalarProperty Name="Serial_Number" ColumnName="Serial_Number" />
+                <ScalarProperty Name="TagClosure_Date" ColumnName="TagClosure_Date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TagReplacementReportByDate" FunctionName="DP_TPModel.Store.TagReplacementReportByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.TagReplacementReportByDate_Result">
+                <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+                <ScalarProperty Name="CustMobNo" ColumnName="CustMobNo" />
+                <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+                <ScalarProperty Name="OldSrNo" ColumnName="OldSrNo" />
+                <ScalarProperty Name="NewSrNo" ColumnName="NewSrNo" />
+                <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Replace_date" ColumnName="Replace_date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DistributStatistics" FunctionName="DP_TPModel.Store.DistributStatistics">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DP_TPModel.DistributStatistics_Result">
+                <ScalarProperty Name="TagSoldCount" ColumnName="TagSoldCount" />
+                <ScalarProperty Name="TagUnSoldCount" ColumnName="TagUnSoldCount" />
+                <ScalarProperty Name="DistTeamSalesPersonCount" ColumnName="DistTeamSalesPersonCount" />
+                <ScalarProperty Name="DistTeamCustomerCount" ColumnName="DistTeamCustomerCount" />
+                <ScalarProperty Name="DistAmountBalance" ColumnName="DistAmountBalance" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

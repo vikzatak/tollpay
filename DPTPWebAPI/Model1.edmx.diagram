@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3db036762c464819ae318ae4b9559b88" Name="Diagram1">
+      <Diagram DiagramId="30cfc6833236429499a2b2e7bec429c1" Name="Diagram1" ZoomLevel="33">
         <EntityTypeShape EntityType="DP_TPModel.AF_DocTypeCodes" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.AF_ExceptionCodes" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.AF_GenericResponseCodes" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
@@ -52,13 +52,13 @@
         <EntityTypeShape EntityType="DP_TPModel.RFID_Tracker" Width="1.5" PointX="2.75" PointY="19.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.RouteTollsQuery" Width="1.5" PointX="4.75" PointY="19.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.RTO" Width="1.5" PointX="14.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.sysdiagram" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.tagActivateSuspendClose" Width="1.5" PointX="20.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.TollPayWallet" Width="1.5" PointX="20.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.TollPlaza" Width="1.5" PointX="20.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.TollPlazaEmployee" Width="1.5" PointX="20.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.TollPlazzaIPAccess" Width="1.5" PointX="6.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.TollPlazzPayment" Width="1.5" PointX="8.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.tagActivateSuspendClose" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TagReplacementReq" Width="1.5" PointX="20.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TollPayWallet" Width="1.5" PointX="20.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TollPlaza" Width="1.5" PointX="20.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TollPlazaEmployee" Width="1.5" PointX="6.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TollPlazzaIPAccess" Width="1.5" PointX="8.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.TollPlazzPayment" Width="1.5" PointX="20.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.TollVehicleType" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.TranP_MaterialTypes" Width="1.5" PointX="0.75" PointY="22.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.TranP_TruckTrip_Payment" Width="1.5" PointX="2.75" PointY="22.75" IsExpanded="true" />
@@ -72,7 +72,8 @@
         <EntityTypeShape EntityType="DP_TPModel.UserRole" Width="1.5" PointX="22.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.User" Width="1.5" PointX="22.75" PointY="23.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DP_TPModel.UserTollTracker" Width="1.5" PointX="24.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DP_TPModel.HistoryTollPlazza" Width="1.5" PointX="4.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.HistoryTollPlazza" Width="1.5" PointX="24.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DP_TPModel.IndusInd_walletRecharge" Width="1.5" PointX="9.375" PointY="25.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

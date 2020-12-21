@@ -9,6 +9,8 @@ namespace DPTPWebAPI
     {
         public void Configuration(IAppBuilder app)
         {
+            // Configure the SignalR hosting    
+            app.MapSignalR();
             ConfigureAuth(app);
         }
     }

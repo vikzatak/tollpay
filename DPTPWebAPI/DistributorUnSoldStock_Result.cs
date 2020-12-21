@@ -11,10 +11,9 @@ namespace DPTPWebAPI
 {
     using System;
     
-    public partial class ASPOutwardReportDayWiseQuantityByDistributor_Result
+    public partial class DistributorUnSoldStock_Result
     {
         public string Vehicle_Type { get; set; }
         public Nullable<int> TagCount { get; set; }
-        public string ImportDate { get; set; }
     }
 }

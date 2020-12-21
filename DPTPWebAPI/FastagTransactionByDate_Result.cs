@@ -11,10 +11,12 @@ namespace DPTPWebAPI
 {
     using System;
     
-    public partial class ASPOutwardReportDayWiseQuantityByDistributor_Result
+    public partial class FastagTransactionByDate_Result
     {
-        public string Vehicle_Type { get; set; }
-        public Nullable<int> TagCount { get; set; }
-        public string ImportDate { get; set; }
+        public string firstname { get; set; }
+        public string phone { get; set; }
+        public Nullable<decimal> Credit { get; set; }
+        public string Payment_Type { get; set; }
+        public string Transaction_Date { get; set; }
     }
 }

@@ -11,10 +11,14 @@ namespace DPTPWebAPI
 {
     using System;
     
-    public partial class ASPOutwardReportDayWiseQuantityByDistributor_Result
+    public partial class TagReplacementReport_Result
     {
+        public string Customer_Name { get; set; }
+        public string CustMobNo { get; set; }
+        public string OldSrNo { get; set; }
         public string Vehicle_Type { get; set; }
-        public Nullable<int> TagCount { get; set; }
-        public string ImportDate { get; set; }
+        public string Reason { get; set; }
+        public Nullable<System.DateTime> ReqDate { get; set; }
+        public Nullable<System.DateTime> ApprovDate { get; set; }
     }
 }

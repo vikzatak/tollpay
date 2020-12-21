@@ -125,7 +125,7 @@ namespace DPTPWebAPI.Controllers
             //var filePath = Path.GetTempFileName();
 
             // full path to file in current project location
-            string filedir = "C:\\inetpub\\Websites\\tollpay.in\\docs\\"; // Path.Combine(Directory.GetCurrentDirectory(), "NewFolder");
+            string filedir = "C:\\inetpub\\wwwroot\\tollpay.in\\docs"; // Path.Combine(Directory.GetCurrentDirectory(), "NewFolder");
             //Console.WriteLine(filedir);
             //Console.WriteLine(Directory.Exists(filedir));
             if (!Directory.Exists(filedir))

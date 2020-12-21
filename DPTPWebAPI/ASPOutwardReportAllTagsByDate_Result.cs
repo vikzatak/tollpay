@@ -17,7 +17,7 @@ namespace DPTPWebAPI
         public string TagSrNo { get; set; }
         public string Serial_Number { get; set; }
         public string Batch_Number { get; set; }
-        public string Lot_Number { get; set; }
+        public int Lot_Number { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<decimal> TotalCost { get; set; }
     }

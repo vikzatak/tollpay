@@ -33,5 +33,8 @@ namespace DPTPWebAPI
         public string ecom_CustomerVehicleType { get; set; }
         public string ecom_CustomerIdentity { get; set; }
         public Nullable<System.DateTime> ecom_CreatedDate { get; set; }
+        public string TagAcctID { get; set; }
+        public string BankStatus { get; set; }
+        public Nullable<System.DateTime> TagClosure_Date { get; set; }
     }
 }

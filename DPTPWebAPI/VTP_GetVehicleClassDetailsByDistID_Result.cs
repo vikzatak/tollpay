@@ -11,10 +11,13 @@ namespace DPTPWebAPI
 {
     using System;
     
-    public partial class ASPOutwardReportDayWiseQuantityByDistributor_Result
+    public partial class VTP_GetVehicleClassDetailsByDistID_Result
     {
-        public string Vehicle_Type { get; set; }
-        public Nullable<int> TagCount { get; set; }
-        public string ImportDate { get; set; }
+        public int VehicleID { get; set; }
+        public int VehicleClassId { get; set; }
+        public string VehicleType { get; set; }
+        public decimal Amount { get; set; }
+        public decimal SecurityDeposit { get; set; }
+        public decimal CardCost { get; set; }
     }
 }
